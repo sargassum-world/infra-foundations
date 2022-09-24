@@ -12,8 +12,11 @@ resource "google_kms_key_ring" "disks-1" {
 // Note: the service account can't just give whatever permissions it wants, so this step actually
 // has to be performed manually in the Google Cloud console. Just go to the Key Management panel,
 // open the Info Panel on the right, select the keyring, and click "Add Principal" to grant the
-// "Cloud KMS CryptoKey Encrypter/Decrypter" role to the Google Compute Engine service account
-// (note: this is not the Terraform service account!).
+// "Cloud KMS CryptoKey Encrypter/Decrypter" role to the Google Compute Engine Service Agent's
+// service account, which has the format
+// service-PROJECT_NUMBER@compute-system.iam.gserviceaccount.com (note: this is not the Terraform
+// service account, nor is it the Compute Engine default service account, which has the format
+// PROJECT_NUMBER-compute@developer.gserviceaccount.com!).
 /*
 resource "google_kms_key_ring_iam_member" "disks-1-service-tf" {
   key_ring_id = google_kms_key_ring.disks-1.id

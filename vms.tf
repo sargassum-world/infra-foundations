@@ -15,14 +15,14 @@ provider "google" {
   datacenter  = "dc14"
 }*/
 
-resource "google_kms_key_ring" "foundations-1" {
+resource "google_kms_key_ring" "disks-1" {
   name     = "foundations-1"
   location = "global"
 }
 
-resource "google_kms_crypto_key" "foundations-1-1" {
+resource "google_kms_crypto_key" "disk-1-1" {
   name            = "foundations-1"
-  key_ring        = google_kms_key_ring.foundations-1
+  key_ring        = google_kms_key_ring.disks-1.id
   rotation_period = "7777000s"
 
   lifecycle {
@@ -39,7 +39,7 @@ resource "google_compute_instance" "us-west1-a-1" {
     initialize_params {
       image = "ubuntu-os-cloud/ubuntu-minimal-2204-lts"
     }
-    disk_encryption_key_raw = google_kms_crypto_key.foundations-1-1
+    disk_encryption_key_raw = google_kms_crypto_key.disk-1-1.id
   }
 
   network_interface {

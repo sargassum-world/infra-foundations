@@ -28,7 +28,6 @@ resource "google_kms_crypto_key" "disk-1-1" {
   purpose         = "ENCRYPT_DECRYPT"
   rotation_period = "7770000s"
 
-  // TODO: restore this lifecycle hook!
   lifecycle {
     prevent_destroy = true
   }

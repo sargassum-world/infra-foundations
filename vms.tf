@@ -33,9 +33,9 @@ resource "google_kms_crypto_key" "disk-1-1" {
   rotation_period = "7770000s"
 
   // TODO: restore this lifecycle hook!
-  /*lifecycle {
+  lifecycle {
     prevent_destroy = true
-  }*/
+  }
 }
 
 resource "google_compute_instance" "us-west1-a-1" {

@@ -23,7 +23,7 @@ resource "google_kms_key_ring" "disks-1" {
 resource "google_kms_crypto_key" "disk-1-1" {
   name            = "foundations-1"
   key_ring        = google_kms_key_ring.disks-1.id
-  rotation_period = "7777000s"
+  rotation_period = "7770000s"
 
   lifecycle {
     prevent_destroy = true

@@ -13,6 +13,12 @@ resource "google_compute_subnetwork" "foundations-us-west1" {
   network       = google_compute_network.foundations.id
   region        = "us-west1"
   ip_cidr_range = "10.128.0.0/24"
+  
+  log_config {
+    aggregation_interval = "INTERVAL_10_MIN"
+    flow_sampling        = 0.5
+    metadata             = "INCLUDE_ALL_METADATA"
+  }
 }
 
 resource "google_kms_key_ring" "disks-1" {

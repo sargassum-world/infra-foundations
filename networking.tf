@@ -1,8 +1,8 @@
 provider "zerotier" {}
 
-resource "zerotier_network" "ztoverlay" {
-  name        = "infra.sargassum.world"
-  description = "Control plane for sargassum.world"
+resource "zerotier_network" "bootstrap" {
+  name        = "bootstrap.infra.sargassum.world"
+  description = "Control plane for bootstrapping sargassum.world"
 
   assign_ipv4 {
     zerotier = false

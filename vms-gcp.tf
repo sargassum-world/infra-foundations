@@ -24,8 +24,7 @@ resource "google_kms_crypto_key" "disk-1-1" {
 // Note: the service account obviously can't just give itself whatever permissions it wants, so this
 // step actually has to be performed manually in the Google Cloud console. Just go to the Key
 // Management panel, navigate to and select the key, open the Info Panel on the right, and click
-// "Add Principal" to grant the "Cloud KMS CryptoKey Encrypter/Decrypter" role to the Terraform
-// service account.
+// "Add Principal" to add the "Cloud KMS CryptoKey Encrypter" role to the Terraform service account.
 /*
 resource "google_kms_crypto_key_iam_member" "disks-1-service-tf" {
   crypto_key_id = google_kms_crypto_key.disk-1-1.id

@@ -9,6 +9,12 @@ resource "google_kms_key_ring" "disks-1" {
   location = "global"
 }
 
+resource "google_kms_key_ring_iam_member" "disks-1-service-tf" {
+  key_ring_id = google_kms_key_ring.disks-1.id
+  role        = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  member      = "serviceAccount:${var.gce_service_account}"
+}
+
 resource "google_kms_crypto_key" "disk-1-1" {
   name            = "foundations-disk-1-1"
   key_ring        = google_kms_key_ring.disks-1.id
@@ -20,18 +26,6 @@ resource "google_kms_crypto_key" "disk-1-1" {
     prevent_destroy = true
   }
 }
-
-// Note: the service account obviously can't just give itself whatever permissions it wants, so this
-// step actually has to be performed manually in the Google Cloud console. Just go to the Key
-// Management panel, navigate to and select the key, open the Info Panel on the right, and click
-// "Add Principal" to add the "Cloud KMS CryptoKey Encrypter" role to the Terraform service account.
-/*
-resource "google_kms_crypto_key_iam_member" "disks-1-service-tf" {
-  crypto_key_id = google_kms_crypto_key.disk-1-1.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = "serviceAccount:${var.gcp_service_account}"
-}
-*/
 
 resource "google_compute_instance" "us-west1-a-1" {
   name         = "foundations-us-west1-a-1"

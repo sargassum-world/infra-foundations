@@ -4,6 +4,7 @@
 // HCLOUD_TOKEN
 
 
-variable "gcp_service_account" {
-  type = string
+variable "gce_service_account" {
+  type        = string
+  description = "The Google Compute Engine service account (not the Terraform service account)"
 }

@@ -1,30 +1,25 @@
-/*provider "hcloud" {
-}*/
-
 provider "google" {
   project = "sargassum-world"
   region  = "us-west1"
   zone    = "us-west1-a"
 }
 
-/*resource "hcloud_server" "eu-central-fsn1-dc14-1" {
-  name        = "foundations-eu-central-fsn1-dc14-1"
-  server_type = "cpx11"
-  image       = "alpine-virt-3.16.0"
-  location    = "fsn1"
-  datacenter  = "dc14"
-}*/
-
 resource "google_kms_key_ring" "disks-1" {
   name     = "foundations-disks-1"
   location = "global"
 }
 
+// Note: the service account obviously can't just give itself whatever permissions it wants, so this
+// step actually has to be performed manually in the Google Cloud console. Just go to the Key
+// Management panel, open the Info Panel on the right, select the keyring, and click "Add Principal"
+// to grant the "Cloud KMS CryptoKey Encrypter/Decrypter" role to the Terraform service account.
+/*
 resource "google_kms_key_ring_iam_member" "disks-1-service-tf" {
   key_ring_id = google_kms_key_ring.disks-1.id
   role        = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
   member      = "serviceAccount:${var.gcp_service_account}"
 }
+*/
 
 resource "google_kms_crypto_key" "disk-1-1" {
   name            = "foundations-disk-1-1"

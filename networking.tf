@@ -1,8 +1,8 @@
 provider "zerotier" {}
 
-resource "zerotier_network" "bootstrap" {
-  name        = "bootstrap.infra.sargassum.world"
-  description = "Control plane for bootstrapping sargassum.world"
+resource "zerotier_network" "foundations" {
+  name        = "foundations.infra.sargassum.world"
+  description = "Control plane for the foundations of sargassum.world"
 
   assign_ipv4 {
     zerotier = false

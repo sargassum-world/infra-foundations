@@ -16,13 +16,20 @@ provider "google" {
 }*/
 
 resource "google_kms_key_ring" "disks-1" {
-  name     = "foundations-1"
+  name     = "foundations-disks-1"
   location = "global"
 }
 
+resource "google_kms_key_ring_iam_member" "disks-1-service-tf" {
+  key_ring_id = google_kms_key_ring.disks-1.id
+  role        = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  member      = var.gcp_service_account
+}
+
 resource "google_kms_crypto_key" "disk-1-1" {
-  name            = "foundations-1"
+  name            = "foundations-disk-1-1"
   key_ring        = google_kms_key_ring.disks-1.id
+  purpose         = "ENCRYPT_DECRYPT"
   rotation_period = "7770000s"
 
   lifecycle {

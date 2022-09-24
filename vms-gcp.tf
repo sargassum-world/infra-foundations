@@ -12,7 +12,7 @@ resource "google_compute_subnetwork" "foundations-us-west1" {
   name          = "foundations-us-west1"
   network       = google_compute_network.foundations.id
   region        = "us-west1"
-  ip_cidr_range = "10.128.0.0/24"
+  ip_cidr_range = "10.64.0.0/24"
   
   log_config {
     aggregation_interval = "INTERVAL_10_MIN"

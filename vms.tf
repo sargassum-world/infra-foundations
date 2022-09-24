@@ -39,7 +39,7 @@ resource "google_compute_instance" "us-west1-a-1" {
     initialize_params {
       image = "ubuntu-os-cloud/ubuntu-minimal-2204-lts"
     }
-    disk_encryption_key_raw = google_kms_crypto_key.disk-1-1.id
+    kms_key_self_link = google_kms_crypto_key.disk-1-1.id
   }
 
   network_interface {

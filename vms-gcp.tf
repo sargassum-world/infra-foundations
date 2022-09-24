@@ -4,6 +4,17 @@ provider "google" {
   zone    = "us-west1-a"
 }
 
+resource "google_compute_network" "foundations" {
+  name = "foundations"
+}
+
+resource "google_compute_subnetwork" "foundations-us-west1" {
+  name          = "foundations-us-west1"
+  network       = google_compute_network.foundations.id
+  region        = "us-west1"
+  ip_cidr_range = "10.128.0.0/24"
+}
+
 resource "google_kms_key_ring" "disks-1" {
   name     = "foundations-disks-1"
   location = "global"
@@ -38,8 +49,9 @@ resource "google_kms_crypto_key" "disk-1-1" {
 
 resource "google_compute_instance" "us-west1-a-1" {
   name         = "foundations-us-west1-a-1"
-  machine_type = "e2-micro"
+  region       = "us-west1"
   zone         = "us-west1-a"
+  machine_type = "e2-micro"
 
   boot_disk {
     initialize_params {
@@ -49,7 +61,7 @@ resource "google_compute_instance" "us-west1-a-1" {
   }
 
   network_interface {
-    network = "default"
+    subnetwork = google_compute_subnetwork.foundations-us-west1.id
   }
 
   metadata = {
@@ -59,5 +71,28 @@ resource "google_compute_instance" "us-west1-a-1" {
   shielded_instance_config {
     enable_vtpm                 = true
     enable_integrity_monitoring = true
+  }
+}
+
+resource "google_compute_router" "us-west1" {
+  name    = "foundations-us-west1"
+  region  = "us-west1"
+  network = google_compute_network.foundations.id
+  
+  bgp {
+    asn = 64514
+  }
+}
+
+resource "google_compute_router_nat" "us-west1" {
+  name                               = "foundations-us-west1"
+  router                             = google_compute_router.us-west1.name
+  region                             = "us-west1"
+  nat_ip_allocate_option             = "AUTO_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+  
+  log_config {
+    enable = true
+    filter = "ERRORS_ONLY"
   }
 }

@@ -80,6 +80,9 @@ resource "google_compute_instance" "us-west1-a-1" {
   name         = "foundations-us-west1-a-1"
   zone         = "us-west1-a"
   machine_type = "e2-micro"
+  
+  // TODO: comment this out after we finish changing the network interface
+  allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {

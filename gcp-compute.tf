@@ -58,7 +58,7 @@ resource "google_compute_instance" "us-west1-a-1" {
     block-project-ssh-keys = true
   }
 
-  tags = ["iap-ssh"]
+  tags = ["iap-ssh", "zerotier"]
 
   shielded_instance_config {
     enable_vtpm                 = true

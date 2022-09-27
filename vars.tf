@@ -7,8 +7,3 @@ variable "gcp-project-id" {
   type        = string
   description = "GCP project ID"
 }
-
-variable "gcp-terraform-service-account" {
-  type        = string
-  description = "GCP service account identifier for Terraform"
-}

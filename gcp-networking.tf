@@ -17,12 +17,17 @@ resource "google_compute_firewall" "allow-iap-forwarded-ssh" {
   target_tags   = ["iap-ssh"]
 }
 
-# Note: This requires the Cloud Resource Manager and Identity-Aware Proxy APIs to first be enabled
-resource "google_project_iam_member" "iap-terraform" {
+# Note: the service account can't just give itself whatever permissions it wants, so this step
+# actually has to be performed manually in the Google Cloud console. Just go to the Identity-Aware
+# Proxy panel, enable the Identity-Aware Proxy API (if needed), select the SSH and TCP Resources
+# tab, check the checkbox for "All Tunnel Resources", click "Add Principal" in the right pane, and
+# add the GCP service account for Terraform to the "New principals" field and the IAP-secured Tunnel
+# User role to the Roles dropdown.
+/*resource "google_project_iam_member" "iap-terraform" {
   project = var.gcp-project-id
   role    = "roles/iap.tunnelResourceAccessor"
   member  = var.gcp-terraform-service-account
-}
+}*/
 
 # us-west1 Region
 

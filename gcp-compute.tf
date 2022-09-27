@@ -1,5 +1,6 @@
 # Keys
 
+# Note: this requires the Cloud Key Management Service API to first be enabled
 resource "google_kms_key_ring" "disks-1" {
   name     = "foundations-disks-1"
   location = "global"
@@ -34,6 +35,7 @@ resource "google_kms_crypto_key" "disk-1-1" {
 
 # Virtual Machines
 
+# Note: this requires the Compute Engine API to first be enabled
 resource "google_compute_instance" "us-west1-a-1" {
   name         = "foundations-us-west1-a-1"
   zone         = "us-west1-a"

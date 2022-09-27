@@ -17,6 +17,7 @@ resource "google_compute_firewall" "allow-iap-forwarded-ssh" {
   target_tags   = ["iap-ssh"]
 }
 
+# Note: This requires the Cloud Resource Manager API to first be enabled
 resource "google_project_iam_member" "iap-terraform" {
   project = var.gcp-project-id
   role    = "roles/iap.tunnelResourceAccessor"

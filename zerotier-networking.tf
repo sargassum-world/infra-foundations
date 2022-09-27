@@ -1,5 +1,3 @@
-provider "zerotier" {}
-
 resource "zerotier_network" "foundations" {
   name        = "foundations.infra.sargassum.world"
   description = "Control plane for the foundations of sargassum.world"
@@ -16,5 +14,5 @@ resource "zerotier_network" "foundations" {
 
   private          = true
   enable_broadcast = true
-  flow_rules       = file("${path.module}/ztoverlay-flowrules.txt")
+  flow_rules       = file("${path.module}/zerotier-networking-foundations.flowrules")
 }

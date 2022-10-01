@@ -41,7 +41,7 @@ resource "google_compute_instance" "us_west1_a_1" {
   zone         = "us-west1-a"
   machine_type = "e2-micro"
 
-  # allow_stopping_for_update = true
+  allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {

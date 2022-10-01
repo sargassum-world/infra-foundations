@@ -4,7 +4,7 @@ resource "google_compute_network" "foundations" {
   name = "foundations"
 }
 
-resource "google_compute_firewall" "allow-iap-forwarded-ssh" {
+resource "google_compute_firewall" "allow_iap_forwarded_ssh" {
   name    = "allow-iap-forwarded-ssh"
   network = google_compute_network.foundations.name
 
@@ -16,7 +16,7 @@ resource "google_compute_firewall" "allow-iap-forwarded-ssh" {
   target_tags   = ["iap-ssh"]
 }
 
-resource "google_compute_firewall" "allow-zerotier-ingress" {
+resource "google_compute_firewall" "allow_zerotier_ingress" {
   name    = "allow-zerotier-ingress"
   network = google_compute_network.foundations.name
 
@@ -29,7 +29,7 @@ resource "google_compute_firewall" "allow-zerotier-ingress" {
   target_tags   = ["zerotier"]
 }
 
-resource "google_compute_firewall" "allow-zerotier-egress" {
+resource "google_compute_firewall" "allow_zerotier_egress" {
   name      = "allow-zerotier-egress"
   network   = google_compute_network.foundations.name
   direction = "EGRESS"
@@ -47,15 +47,15 @@ resource "google_compute_firewall" "allow-zerotier-egress" {
 # tab, check the checkbox for "All Tunnel Resources", click "Add Principal" in the right pane, and
 # add the GCP service account for Terraform to the "New principals" field and the IAP-secured Tunnel
 # User role to the Roles dropdown.
-/*resource "google_project_iam_member" "iap-terraform" {
-  project = var.gcp-project-id
+/*resource "google_project_iam_member" "iap_terraform" {
+  project = var.gcp_project_id
   role    = "roles/iap.tunnelResourceAccessor"
-  member  = var.gcp-terraform-service-account
+  member  = var.gcp_terraform_service_account
 }*/
 
 # us-west1 Region
 
-resource "google_compute_subnetwork" "foundations-us-west1" {
+resource "google_compute_subnetwork" "foundations_us_west1" {
   name          = "foundations-us-west1"
   network       = google_compute_network.foundations.id
   region        = "us-west1"
@@ -68,7 +68,7 @@ resource "google_compute_subnetwork" "foundations-us-west1" {
   }
 }
 
-resource "google_compute_router" "us-west1" {
+resource "google_compute_router" "us_west1" {
   name    = "foundations-us-west1"
   region  = "us-west1"
   network = google_compute_network.foundations.id
@@ -78,9 +78,9 @@ resource "google_compute_router" "us-west1" {
   }
 }
 
-resource "google_compute_router_nat" "us-west1" {
+resource "google_compute_router_nat" "us_west1" {
   name                               = "foundations-us-west1"
-  router                             = google_compute_router.us-west1.name
+  router                             = google_compute_router.us_west1.name
   region                             = "us-west1"
   nat_ip_allocate_option             = "AUTO_ONLY"
   source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"

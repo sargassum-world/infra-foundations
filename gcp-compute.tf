@@ -1,7 +1,7 @@
 # Keys
 
 # Note: this requires the Cloud Key Management Service API to first be enabled
-resource "google_kms_key_ring" "disks-1" {
+resource "google_kms_key_ring" "disks_1" {
   name     = "foundations-disks-1"
   location = "global"
 }
@@ -15,16 +15,16 @@ resource "google_kms_key_ring" "disks-1" {
 # service account, nor is it the Compute Engine default service account, which has the format
 # PROJECT_NUMBER-compute@developer.gserviceaccount.com!).
 /*
-resource "google_kms_key_ring_iam_member" "disks-1-service-tf" {
-  key_ring_id = google_kms_key_ring.disks-1.id
+resource "google_kms_key_ring_iam_member" "disks_1_service_tf" {
+  key_ring_id = google_kms_key_ring.disks_1.id
   role        = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
   member      = "serviceAccount:${var.gce_service_account}"
 }
 */
 
-resource "google_kms_crypto_key" "disk-1-1" {
+resource "google_kms_crypto_key" "disk_1_1" {
   name            = "foundations-disk-1-1"
-  key_ring        = google_kms_key_ring.disks-1.id
+  key_ring        = google_kms_key_ring.disks_1.id
   purpose         = "ENCRYPT_DECRYPT"
   rotation_period = "7770000s"
 
@@ -36,7 +36,7 @@ resource "google_kms_crypto_key" "disk-1-1" {
 # Virtual Machines
 
 # Note: this requires the Compute Engine API to first be enabled
-resource "google_compute_instance" "us-west1-a-1" {
+resource "google_compute_instance" "us_west1_a_1" {
   name         = "foundations-us-west1-a-1"
   zone         = "us-west1-a"
   machine_type = "e2-micro"
@@ -45,13 +45,13 @@ resource "google_compute_instance" "us-west1-a-1" {
 
   boot_disk {
     initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-minimal-2204-lts"
+      image = var.gcp_vm_orchestrator_image
     }
-    kms_key_self_link = google_kms_crypto_key.disk-1-1.id
+    kms_key_self_link = google_kms_crypto_key.disk_1_1.id
   }
 
   network_interface {
-    subnetwork = google_compute_subnetwork.foundations-us-west1.id
+    subnetwork = google_compute_subnetwork.foundations_us_west1.id
   }
 
   metadata = {

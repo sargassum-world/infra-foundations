@@ -52,6 +52,11 @@ resource "google_compute_instance" "us_west1_a_1" {
 
   network_interface {
     subnetwork = google_compute_subnetwork.foundations_us_west1.id
+
+    access_config {
+      nat_ip       = google_compute_address.us_west1_a_1.address
+      network_tier = "PREMIUM"
+    }
   }
 
   metadata = {

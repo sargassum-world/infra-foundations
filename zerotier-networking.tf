@@ -16,3 +16,17 @@ resource "zerotier_network" "foundations" {
   enable_broadcast = true
   flow_rules       = file("${path.module}/zerotier-networking-foundations.flowrules")
 }
+
+resource "zerotier_identity" "gcp_us_west1_a_1" {}
+
+resource "zerotier_member" "gcp_us_west1_a_1" {
+  name       = "gcp-us-west1-a-1"
+  member_id  = zerotier_identity.gcp_us_west1_a_1.id
+  network_id = zerotier_network.foundations.id
+}
+
+resource "zerotier_member" "ethan_vulcan" {
+  name       = "ethan-vulcan"
+  member_id  = "cb1b5001de"
+  network_id = zerotier_network.foundations.id
+}

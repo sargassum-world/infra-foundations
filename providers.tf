@@ -9,5 +9,5 @@ provider "google" {
 }
 
 provider "nomad" {
-  address = "https://${google_compute_address.us_west1_a_1}:4646"
+  address = "https://${google_compute_address.us_west1_a_1.address}:4646"
 }

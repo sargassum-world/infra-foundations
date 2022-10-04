@@ -16,8 +16,10 @@ resource "google_compute_firewall" "allow_iap_forwarded_ssh" {
   target_tags   = ["iap-ssh"]
 }
 
-resource "google_compute_firewall" "allow_zerotier_ingress" {
-  name    = "allow-zerotier-ingress"
+# TODO: is this needed? defsec warns against allowing ingress traffic from /0 on the public internet
+/*
+resource "google_compute_firewall" "allow_zerotier_udp" {
+  name    = "allow-zerotier"
   network = google_compute_network.foundations.name
 
   allow {
@@ -26,20 +28,83 @@ resource "google_compute_firewall" "allow_zerotier_ingress" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["zerotier"]
+  target_tags   = ["zerotier-agent"]
+}
+*/
+
+# TODO: do we need to allow public access to ZeroTier APIs?
+/*
+resource "google_compute_firewall" "allow_zerotier_tcp" {
+  name    = "allow-zerotier"
+  network = google_compute_network.foundations.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["9993"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["zerotier-api"]
+}
+*/
+
+resource "google_compute_firewall" "allow_nomad_http_terraform" {
+  name    = "allow-nomad-http-terraform"
+  network = google_compute_network.foundations.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["4646"]
+  }
+
+  source_ranges = data.tfe_ip_ranges.addresses.vcs
+  target_tags   = ["nomad-api-terraform"]
 }
 
-resource "google_compute_firewall" "allow_zerotier_egress" {
-  name      = "allow-zerotier-egress"
-  network   = google_compute_network.foundations.name
-  direction = "EGRESS"
+# We don't need to connect to clients over the public internet yet
+/*
+resource "google_compute_firewall" "allow_nomad_rpc" {
+  name    = "allow-nomad-rpc"
+  network = google_compute_network.foundations.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["4647"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["nomad-server", "nomad-client"]
+}
+*/
+
+# We don't need Nomad server clustering yet
+/*
+resource "google_compute_firewall" "allow_nomad_serf_tcp" {
+  name    = "allow-nomad-serf-tcp"
+  network = google_compute_network.foundations.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["4648"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["nomad-server"]
+}
+
+resource "google_compute_firewall" "allow_nomad_serf_udp" {
+  name    = "allow-nomad-serf-udp"
+  network = google_compute_network.foundations.name
 
   allow {
     protocol = "udp"
+    ports    = ["4648"]
   }
 
-  target_tags = ["zerotier"]
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["nomad-server"]
 }
+*/
 
 # Note: the service account can't just give itself whatever permissions it wants, so this step
 # actually has to be performed manually in the Google Cloud console. Just go to the Identity-Aware
@@ -89,4 +154,13 @@ resource "google_compute_router_nat" "us_west1" {
     enable = true
     filter = "ERRORS_ONLY"
   }
+}
+
+# External IP Addresses
+
+resource "google_compute_address" "us_west1_a_1" {
+  name         = "foundations-us-west1-a-1"
+  address_type = "EXTERNAL"
+  purpose      = "GCE_ENDPOINT"
+  network_tier = "PREMIUM"
 }

@@ -8,6 +8,10 @@ terraform {
   }
 
   required_providers {
+    tfe = {
+      source  = "hashicorp/tfe"
+      version = "~>0.37.0"
+    }
     zerotier = {
       source  = "zerotier/zerotier"
       version = "~> 1.2.0"

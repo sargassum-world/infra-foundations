@@ -161,6 +161,5 @@ resource "google_compute_router_nat" "us_west1" {
 resource "google_compute_address" "us_west1_a_1" {
   name         = "foundations-us-west1-a-1"
   address_type = "EXTERNAL"
-  purpose      = "GCE_ENDPOINT"
   network_tier = "PREMIUM"
 }

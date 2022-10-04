@@ -16,8 +16,8 @@ resource "google_compute_firewall" "allow_iap_forwarded_ssh" {
   target_tags   = ["iap-ssh"]
 }
 
-resource "google_compute_firewall" "allow_zerotier_ingress" {
-  name    = "allow-zerotier-ingress"
+resource "google_compute_firewall" "allow_zerotier_udp" {
+  name    = "allow-zerotier"
   network = google_compute_network.foundations.name
 
   allow {
@@ -26,19 +26,72 @@ resource "google_compute_firewall" "allow_zerotier_ingress" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["zerotier"]
+  target_tags   = ["zerotier-agent"]
 }
 
-resource "google_compute_firewall" "allow_zerotier_egress" {
-  name      = "allow-zerotier-egress"
-  network   = google_compute_network.foundations.name
-  direction = "EGRESS"
+resource "google_compute_firewall" "allow_zerotier_tcp" {
+  name    = "allow-zerotier"
+  network = google_compute_network.foundations.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["9993"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["zerotier-api"]
+}
+
+resource "google_compute_firewall" "allow_nomad_http" {
+  name    = "allow-nomad-http"
+  network = google_compute_network.foundations.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["4646"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["nomad-api"]
+}
+
+resource "google_compute_firewall" "allow_nomad_rpc" {
+  name    = "allow-nomad-rpc"
+  network = google_compute_network.foundations.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["4647"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["nomad-server", "nomad-client"]
+}
+
+resource "google_compute_firewall" "allow_nomad_serf_tcp" {
+  name    = "allow-nomad-serf-tcp"
+  network = google_compute_network.foundations.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["4648"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["nomad-server"]
+}
+
+resource "google_compute_firewall" "allow_nomad_serf_udp" {
+  name    = "allow-nomad-serf-udp"
+  network = google_compute_network.foundations.name
 
   allow {
     protocol = "udp"
+    ports    = ["4648"]
   }
 
-  target_tags = ["zerotier"]
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["nomad-server"]
 }
 
 # Note: the service account can't just give itself whatever permissions it wants, so this step

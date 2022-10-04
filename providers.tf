@@ -1,3 +1,5 @@
+provider "tfe" {}
+
 provider "zerotier" {}
 
 provider "google" {

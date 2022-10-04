@@ -32,6 +32,8 @@ resource "google_compute_firewall" "allow_zerotier_udp" {
 }
 */
 
+# TODO: do we need to allow public access to ZeroTier APIs?
+/*
 resource "google_compute_firewall" "allow_zerotier_tcp" {
   name    = "allow-zerotier"
   network = google_compute_network.foundations.name
@@ -44,9 +46,10 @@ resource "google_compute_firewall" "allow_zerotier_tcp" {
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["zerotier-api"]
 }
+*/
 
-resource "google_compute_firewall" "allow_nomad_http" {
-  name    = "allow-nomad-http"
+resource "google_compute_firewall" "allow_nomad_http_terraform" {
+  name    = "allow-nomad-http-terraform"
   network = google_compute_network.foundations.name
 
   allow {
@@ -54,10 +57,12 @@ resource "google_compute_firewall" "allow_nomad_http" {
     ports    = ["4646"]
   }
 
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["nomad-api"]
+  source_ranges = data.tfe_ip_ranges.addresses.vcs
+  target_tags   = ["nomad-api-terraform"]
 }
 
+# We don't need to connect to clients over the public internet yet
+/*
 resource "google_compute_firewall" "allow_nomad_rpc" {
   name    = "allow-nomad-rpc"
   network = google_compute_network.foundations.name
@@ -70,7 +75,10 @@ resource "google_compute_firewall" "allow_nomad_rpc" {
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["nomad-server", "nomad-client"]
 }
+*/
 
+# We don't need Nomad server clustering yet
+/*
 resource "google_compute_firewall" "allow_nomad_serf_tcp" {
   name    = "allow-nomad-serf-tcp"
   network = google_compute_network.foundations.name
@@ -96,6 +104,7 @@ resource "google_compute_firewall" "allow_nomad_serf_udp" {
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["nomad-server"]
 }
+*/
 
 # Note: the service account can't just give itself whatever permissions it wants, so this step
 # actually has to be performed manually in the Google Cloud console. Just go to the Identity-Aware

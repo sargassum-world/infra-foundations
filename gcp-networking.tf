@@ -16,6 +16,8 @@ resource "google_compute_firewall" "allow_iap_forwarded_ssh" {
   target_tags   = ["iap-ssh"]
 }
 
+# TODO: is this needed? defsec warns against allowing ingress traffic from /0 on the public internet
+/*
 resource "google_compute_firewall" "allow_zerotier_udp" {
   name    = "allow-zerotier"
   network = google_compute_network.foundations.name
@@ -28,6 +30,7 @@ resource "google_compute_firewall" "allow_zerotier_udp" {
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["zerotier-agent"]
 }
+*/
 
 resource "google_compute_firewall" "allow_zerotier_tcp" {
   name    = "allow-zerotier"

@@ -1,5 +1,9 @@
 provider "zerotier" {}
 
+provider "desec" {
+  api_token = var.desec_api_token
+}
+
 provider "google" {
   project = var.gcp_project_id
   region  = "us-west1"

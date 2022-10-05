@@ -4,7 +4,7 @@ resource "desec_domain" "infra" {
 
 resource "desec_rrset" "zerotier" {
   domain  = desec_domain.infra.name
-  subname = ""
+  subname = "foundations"
   type    = "TXT"
   records = ["\"zerotier-net-id=${zerotier_network.foundations.id}\""]
   ttl     = 3600

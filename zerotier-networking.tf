@@ -25,6 +25,7 @@ resource "zerotier_member" "gcp_us_west1_a_1" {
   network_id = zerotier_network.foundations.id
 }
 
+# TODO: specify administrative members through a Terraform variable
 resource "zerotier_member" "ethan_vulcan" {
   name       = "ethan-vulcan"
   member_id  = "cb1b5001de"

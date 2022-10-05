@@ -30,10 +30,10 @@ job "zerotier_agent" {
         cap_add = ["net_admin"]
       }
 
-      env {
-        ZEROTIER_IDENTITY_SECRET = "${private_key}"
-        ZEROTIER_IDENTITY_PUBLIC = "${public_key}"
-      }
+      # env {
+      #   ZEROTIER_IDENTITY_SECRET = "${private_key}"
+      #   ZEROTIER_IDENTITY_PUBLIC = "${public_key}"
+      # }
 
       resources {
         cpu = 500

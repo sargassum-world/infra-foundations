@@ -2,6 +2,18 @@ resource "desec_domain" "infra" {
   name = "infra.sargassum.world"
 }
 
+# Virtual Machines
+
+resource "desec_rrset" "gcp_us_west1_a_1_a" {
+  domain  = desec_domain.infra.name
+  subname = "gcp-us-west1-a-1"
+  type    = "A"
+  records = [google_compute_address.us_west1_a_1.address]
+  ttl     = 3600
+}
+
+# Zerotier Network
+
 resource "desec_rrset" "zerotier" {
   domain  = desec_domain.infra.name
   subname = "foundations"
@@ -10,10 +22,24 @@ resource "desec_rrset" "zerotier" {
   ttl     = 3600
 }
 
-resource "desec_rrset" "gcp_us_west1_a_1_a" {
+resource "desec_rrset" "zerotier_gcp_us_west1_a_1_aaaa" {
   domain  = desec_domain.infra.name
-  subname = "gcp-us-west1-a-1"
-  type    = "A"
-  records = [google_compute_address.us_west1_a_1.address]
-  ttl     = 3600
+  subname = "gcp-us-west1-a-1.d.foundations"
+  type    = "AAAA"
+  records = [
+    join(
+      ":",
+      [
+        for chunk in chunklist(
+          split(
+            "",
+            "fd${zerotier_network.foundations.id}9993${zerotier_identity.gcp_us_west1_a_1.id}"
+          ),
+          4
+        ) :
+        join("", chunk)
+      ]
+    )
+  ]
+  ttl = 3600
 }

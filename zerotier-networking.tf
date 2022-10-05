@@ -9,13 +9,15 @@ resource "zerotier_network" "foundations" {
   assign_ipv6 {
     zerotier = false
     sixplane = true
-    rfc4193  = false
+    rfc4193  = true
   }
 
   private          = true
   enable_broadcast = true
   flow_rules       = file("${path.module}/zerotier-networking-foundations.flowrules")
 }
+
+# Virtual Machines
 
 resource "zerotier_identity" "gcp_us_west1_a_1" {}
 
@@ -24,6 +26,8 @@ resource "zerotier_member" "gcp_us_west1_a_1" {
   member_id  = zerotier_identity.gcp_us_west1_a_1.id
   network_id = zerotier_network.foundations.id
 }
+
+# Administrative devices
 
 # TODO: specify administrative members through a Terraform variable
 resource "zerotier_member" "ethan_vulcan" {

@@ -1,4 +1,5 @@
 job "docs" {
+  datacenters = ["sargassum-foundations"]
 
   group "example" {
     network {

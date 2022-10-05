@@ -9,35 +9,40 @@ job "zerotier_agent" {
   group "${group}" {
     count = 1
 
-    # network {
-    #   port "zerotier" {
-    #     static = 9993
-    #   }
-    # }
+    affinity {
+      attribute = "$${attr.unique.hostname}"
+      value     = "${affinity}"
+    }
+
+    network {
+      port "zerotier" {
+        static = 9993
+      }
+    }
 
     task "zerotier_one" {
       driver = "docker"
 
       config {
         image = "zerotier/zerotier:1.10.1"
-        # TODO: is this needed?
-        # ports = ["zerotier"]
-        # TODO: is this needed?
-        # network_mode = "host"
+        ports = ["zerotier"]
         devices = [{
           host_path = "/dev/net/tun"
         }]
         cap_add = ["net_admin"]
+        args = [
+          "${network}",
+        ]
       }
 
-      # env {
-      #   ZEROTIER_IDENTITY_SECRET = "${private_key}"
-      #   ZEROTIER_IDENTITY_PUBLIC = "${public_key}"
-      # }
+      env {
+        ZEROTIER_IDENTITY_SECRET = "${private_key}"
+        ZEROTIER_IDENTITY_PUBLIC = "${public_key}"
+      }
 
       resources {
-        cpu = 500
-        memory = 128
+        cpu    = 100
+        memory = 64
       }
     }
   }

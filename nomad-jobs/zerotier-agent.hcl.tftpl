@@ -31,6 +31,7 @@ job "zerotier_agent" {
           container_path = "/dev/net/tun"
         }]
         cap_add = ["net_admin"]
+        network_mode = "host"
         args = [
           "${network}",
         ]
@@ -42,7 +43,7 @@ job "zerotier_agent" {
       }
 
       resources {
-        cpu    = 128
+        cpu    = 200
         memory = 32
       }
     }

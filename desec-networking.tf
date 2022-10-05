@@ -26,20 +26,12 @@ resource "desec_rrset" "zerotier_gcp_us_west1_a_1_aaaa" {
   domain  = desec_domain.infra.name
   subname = "gcp-us-west1-a-1.d.foundations"
   type    = "AAAA"
-  records = [
-    join(
-      ":",
-      [
-        for chunk in chunklist(
-          split(
-            "",
-            "fd${zerotier_network.foundations.id}9993${zerotier_identity.gcp_us_west1_a_1.id}"
-          ),
-          4
-        ) :
-        join("", chunk)
-      ]
-    )
-  ]
+  records = [join(":", [
+    for chunk in chunklist(split(
+      "",
+      "fd${zerotier_network.foundations.id}9993${zerotier_identity.gcp_us_west1_a_1.id}"
+    ), 4) :
+    join("", chunk)
+  ])]
   ttl = 3600
 }

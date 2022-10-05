@@ -12,3 +12,14 @@ variable "gcp_vm_orchestrator_image" {
   type        = string
   description = "Orchestrator VM image"
 }
+
+variable "nomad_secret_id" {
+  type        = string
+  description = "Secret ID for Nomad ACL token"
+  sensitive   = true
+}
+
+variable "nomad_accessor_id" {
+  type        = string
+  description = "Accessor ID for Nomad ACL token"
+}

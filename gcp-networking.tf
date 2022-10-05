@@ -32,24 +32,8 @@ resource "google_compute_firewall" "allow_zerotier_udp" {
 }
 */
 
-# TODO: do we need to allow public access to ZeroTier APIs?
-/*
-resource "google_compute_firewall" "allow_zerotier_tcp" {
-  name    = "allow-zerotier"
-  network = google_compute_network.foundations.name
-
-  allow {
-    protocol = "tcp"
-    ports    = ["9993"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["zerotier-api"]
-}
-*/
-
-resource "google_compute_firewall" "allow_nomad_http_terraform" {
-  name    = "allow-nomad-http-terraform"
+resource "google_compute_firewall" "allow_nomad_http" {
+  name    = "allow-nomad-http"
   network = google_compute_network.foundations.name
 
   allow {
@@ -57,8 +41,8 @@ resource "google_compute_firewall" "allow_nomad_http_terraform" {
     ports    = ["4646"]
   }
 
-  source_ranges = data.tfe_ip_ranges.addresses.vcs
-  target_tags   = ["nomad-api-terraform"]
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["nomad-api"]
 }
 
 # We don't need to connect to clients over the public internet yet

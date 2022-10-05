@@ -7,6 +7,6 @@ provider "google" {
 }
 
 provider "nomad" {
-  address   = "http://${google_compute_address.us_west1_a_1.address}:4646"
+  address   = "http://${google_compute_instance.us_west1_a_1.network_interface.0.access_config.0.nat_ip}:4646"
   secret_id = var.nomad_secret_id
 }

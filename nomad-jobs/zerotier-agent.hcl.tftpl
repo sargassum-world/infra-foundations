@@ -30,7 +30,7 @@ job "zerotier_agent" {
           host_path = "/dev/net/tun"
           container_path = "/dev/net/tun"
         }]
-        cap_add = ["net_admin"]
+        cap_add = ["net_admin", "sys_admin"]
         network_mode = "host"
         args = [
           "${network}",

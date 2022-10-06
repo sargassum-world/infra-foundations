@@ -17,7 +17,7 @@ resource "zerotier_network" "foundations" {
   flow_rules       = file("${path.module}/zerotier-networking-foundations.flowrules")
 
   route {
-    target = "10.144.64.0/16"
+    target = "10.144.64.0/24"
   }
 }
 

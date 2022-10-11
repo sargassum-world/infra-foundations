@@ -1,4 +1,4 @@
-# IP Addresses
+# us_west1_a_1
 
 resource "google_compute_address" "us_west1_a_1" {
   name         = "foundations-us-west1-a-1"
@@ -6,7 +6,20 @@ resource "google_compute_address" "us_west1_a_1" {
   network_tier = "PREMIUM"
 }
 
-# VMs
+resource "google_compute_disk" "us_west1_a_1_data" {
+  name = "foundations-us-west1-a-1-data"
+  type = "standard"
+  zone = "us-west1-a"
+  size = 10
+
+  disk_encryption_key {
+    kms_key_self_link = google_kms_crypto_key.disk_global_1_1.id
+  }
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
 
 # Note: depends on google_project_service.compute
 resource "google_compute_instance" "us_west1_a_1" {
@@ -21,6 +34,12 @@ resource "google_compute_instance" "us_west1_a_1" {
       image = var.gcp_vm_orchestrator_image
     }
     kms_key_self_link = google_kms_crypto_key.disk_global_1_1.id
+  }
+
+  attached_disk {
+    source            = google_compute_disk.us_west1_a_1_data.id
+    device_name       = "data"
+    kms_key_self_link = google_compute_disk.us_west1_a_1_data.disk_encryption_key[0].kms_key_self_link
   }
 
   network_interface {

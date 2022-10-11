@@ -13,9 +13,9 @@ variable "desec_api_token" {
   sensitive   = true
 }
 
-variable "gcp_project_id" {
+variable "gcp_billing_account_id" {
   type        = string
-  description = "GCP project ID"
+  description = "GCP billing account ID"
 }
 
 variable "gcp_vm_orchestrator_image" {

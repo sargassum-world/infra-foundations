@@ -11,6 +11,12 @@ resource "nomad_job" "zerotier_agent" {
   hcl2 {
     enabled = true
   }
+
+  lifecycle {
+    replace_triggered_by = [
+      google_compute_instance.us_west1_a_1.boot_disk.initialize_params.image,
+    ]
+  }
 }
 
 data "local_file" "caddy_public_caddyfile" {
@@ -26,5 +32,11 @@ resource "nomad_job" "caddy" {
 
   hcl2 {
     enabled = true
+  }
+
+  lifecycle {
+    replace_triggered_by = [
+      google_compute_instance.us_west1_a_1.boot_disk.initialize_params.image,
+    ]
   }
 }

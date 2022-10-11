@@ -18,6 +18,11 @@ variable "gcp_billing_account_id" {
   description = "GCP billing account ID"
 }
 
+variable "gcp_project_id" {
+  type        = string
+  description = "GCP project ID"
+}
+
 variable "gcp_vm_orchestrator_image" {
   type        = string
   description = "Orchestrator VM image"

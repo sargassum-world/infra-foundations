@@ -98,7 +98,7 @@ resource "google_compute_firewall" "allow_http" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["http_server"]
+  target_tags   = ["http-server"]
 }
 
 # us-west1 Region

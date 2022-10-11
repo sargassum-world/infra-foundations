@@ -50,7 +50,9 @@ job "caddy" {
       }
 
       template {
-        source        = "./caddy_public_Caddyfile.tpl"
+        data          = <<EOH
+${public_caddyfile}
+EOH
         destination   = "local/Caddyfile"
         change_mode   = "script"
         change_script {

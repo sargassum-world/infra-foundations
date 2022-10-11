@@ -1,4 +1,6 @@
-provider "zerotier" {}
+provider "zerotier" {
+  zerotier_central_token = var.zerotier_central_api_token
+}
 
 provider "desec" {
   api_token = var.desec_api_token

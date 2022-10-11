@@ -14,13 +14,11 @@ resource "google_kms_key_ring" "disks_1" {
 # service-PROJECT_NUMBER@compute-system.iam.gserviceaccount.com (note: this is not the Terraform
 # service account, nor is it the Compute Engine default service account, which has the format
 # PROJECT_NUMBER-compute@developer.gserviceaccount.com!).
-/*
 resource "google_kms_key_ring_iam_member" "disks_1_service_tf" {
   key_ring_id = google_kms_key_ring.disks_1.id
   role        = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member      = "serviceAccount:${var.gce_service_account}"
+  member      = "serviceAccount:service-${google_project.foundations.number}@compute-system.iam.gserviceaccount.com"
 }
-*/
 
 resource "google_kms_crypto_key" "disk_1_1" {
   name            = "foundations-disk-1-1"

@@ -1,3 +1,7 @@
-:80
+gcp-us-west1-a-1.infra.sargassum.world {
+  respond "hello, public internet!"
+}
 
-respond "hello, world!"
+gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
+  respond "hello, private network!"
+}

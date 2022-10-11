@@ -4,6 +4,7 @@ resource "google_compute_network" "foundations" {
   name = "foundations"
 }
 
+# Note: depends on google_project_service.iap
 resource "google_compute_firewall" "allow_iap_forwarded_ssh" {
   name    = "allow-iap-forwarded-ssh"
   network = google_compute_network.foundations.name

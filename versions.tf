@@ -8,6 +8,10 @@ terraform {
   }
 
   required_providers {
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.2.3"
+    }
     zerotier = {
       source  = "zerotier/zerotier"
       version = "~> 1.2.0"

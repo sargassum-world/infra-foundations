@@ -27,13 +27,13 @@ job "zerotier_agent" {
 
       config {
         image   = "zerotier/zerotier:1.10.1"
+        network_mode = "host"
         ports   = ["zerotier"]
         devices = [{
           host_path = "/dev/net/tun"
           container_path = "/dev/net/tun"
         }]
         cap_add      = ["net_admin", "sys_admin"]
-        network_mode = "host"
         args         = [
           "${network}",
         ]

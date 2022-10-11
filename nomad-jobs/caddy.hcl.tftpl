@@ -31,8 +31,9 @@ job "caddy" {
 
       config {
         image        = "caddy:2.6.1"
-        ports        = ["http", "https"]
         network_mode = "host"
+        ports        = ["http", "https"]
+        cap_add      = ["net_bind_service"]
 
         mount {
           type     = "volume"

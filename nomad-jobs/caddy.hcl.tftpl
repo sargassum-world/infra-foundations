@@ -1,0 +1,69 @@
+job "caddy" {
+  type = "service"
+  datacenters = ["sargassum-foundations"]
+
+  update {
+    max_parallel = 1
+  }
+
+  group "${group}" {
+    count = 1
+
+    affinity {
+      attribute = "$${attr.unique.hostname}" # Nomad variable, not Terraform template variable
+      value     = "${affinity}"
+    }
+
+    network {
+      mode = "host"
+
+      port "http" {
+        static = 80
+      }
+
+      port "https" {
+        static = 443
+      }
+    }
+
+    task "public" {
+      driver = "docker"
+
+      config {
+        image        = "caddy:2.6.1"
+        ports        = ["http", "https"]
+        network_mode = "host"
+
+        mount {
+          type     = "volume"
+          target   = "/data"
+          source   = "caddy_public-data"
+          readonly = false
+        }
+
+        mount {
+          type     = "bind"
+          target   = "/etc/caddy/Caddyfile"
+          source   = "local/Caddyfile"
+          readonly = true
+        }
+      }
+
+      template {
+        source        = "./caddy_public_Caddyfile.tpl"
+        destination   = "local/Caddyfile"
+        change_mode   = "script"
+        change_script {
+          command = "caddy"
+          args    = ["reload"]
+        }
+      }
+
+      resources {
+        cpu        = 200
+        memory     = 128
+        memory_max = 256
+      }
+    }
+  }
+}

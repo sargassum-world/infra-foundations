@@ -88,17 +88,18 @@ resource "google_compute_firewall" "allow_nomad_serf_udp" {
 }
 */
 
-# Note: the service account can't just give itself whatever permissions it wants, so this step
-# actually has to be performed manually in the Google Cloud console. Just go to the Identity-Aware
-# Proxy panel, enable the Identity-Aware Proxy API (if needed), select the SSH and TCP Resources
-# tab, check the checkbox for "All Tunnel Resources", click "Add Principal" in the right pane, and
-# add the GCP service account for Terraform to the "New principals" field and the IAP-secured Tunnel
-# User role to the Roles dropdown.
-/*resource "google_project_iam_member" "iap_terraform" {
-  project = var.gcp_project_id
-  role    = "roles/iap.tunnelResourceAccessor"
-  member  = var.gcp_terraform_service_account
-}*/
+resource "google_compute_firewall" "allow_http" {
+  name    = "allow-http"
+  network = google_compute_network.foundations.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "443"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["http_server"]
+}
 
 # us-west1 Region
 

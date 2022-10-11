@@ -10,7 +10,7 @@ job "zerotier_agent" {
     count = 1
 
     affinity {
-      attribute = "$${attr.unique.hostname}"
+      attribute = "$${attr.unique.hostname}" # Nomad variable, not Terraform template variable
       value     = "${affinity}"
     }
 
@@ -45,8 +45,9 @@ job "zerotier_agent" {
       }
 
       resources {
-        cpu    = 150
-        memory = 32
+        cpu        = 200
+        memory     = 32
+        memory_max = 128
       }
     }
   }

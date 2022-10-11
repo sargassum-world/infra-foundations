@@ -19,6 +19,9 @@ resource "google_compute_disk" "us_west1_a_1_data" {
   lifecycle {
     prevent_destroy = true
   }
+
+  # After creation, this disk needs to be manually formatted following the instructions at
+  # https://cloud.google.com/compute/docs/disks/add-persistent-disk#formatting
 }
 
 # Note: depends on google_project_service.compute

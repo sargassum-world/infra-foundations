@@ -1,7 +1,11 @@
 # Also depends on the following environment variables:
-# ZEROTIER_CENTRAL_TOKEN
 # GOOGLE_CREDENTIALS
-# HCLOUD_TOKEN
+
+variable "zerotier_central_api_token" {
+  type        = string
+  description = "API access token for ZeroTier Central"
+  sensitive   = true
+}
 
 variable "desec_api_token" {
   type        = string

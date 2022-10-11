@@ -123,6 +123,16 @@ resource "desec_rrset" "gcp_us_west1_a_1_a" {
   ttl     = 3600
 }
 
+# Services
+
+resource "desec_rrset" "service_nomad" {
+  domain  = desec_domain.infra.name
+  subname = "nomad.s"
+  type    = "A"
+  records = [google_compute_address.us_west1_a_1.address]
+  ttl     = 3600
+}
+
 # Zerotier Network
 
 resource "desec_rrset" "zerotier" {

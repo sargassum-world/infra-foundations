@@ -8,7 +8,7 @@ resource "google_compute_address" "us_west1_a_1" {
 
 resource "google_compute_disk" "us_west1_a_1_data" {
   name = "foundations-us-west1-a-1-data"
-  type = "standard"
+  type = "pd-standard"
   zone = "us-west1-a"
   size = 10
 

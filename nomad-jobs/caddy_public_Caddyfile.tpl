@@ -10,23 +10,25 @@ gcp-us-west1-a-1.d.foundations.infra.sargassum.world:80 {
 
 # Infrastructure Services
 
+{{- $filter := "caddy.enable=true"}}
+
 nomad.s.infra.sargassum.world {
   reverse_proxy localhost:4646
 }
 
 # TODO: enable DNS wildcarding for *.s.infra.sargassum.world in DNS records and make it work with HTTPS
-{{ $filter := list "caddy.enable=true" -}}
 {{- range $service := nomadServices -}}
+  {{- if $service.Tags | contains $filter -}}
 
 {{ $service.Name | toLower }}.s.infra.sargassum.world {
   reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
 
+  {{- end -}}
 {{- end }}
 
 # Nomad-Orchestrated Services
 
-{{ $filter := "caddy.enable=true" -}}
 {{- $hostPattern := "caddy\.reverse_proxy\.host=(.*)" -}}
 {{- range $service := nomadServices -}}
   {{- if $service.Tags | contains $filter -}}

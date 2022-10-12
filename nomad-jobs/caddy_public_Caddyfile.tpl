@@ -26,15 +26,14 @@ nomad.s.infra.sargassum.world {
 
 # Nomad-Orchestrated Services
 
-{{ $filter := list "caddy.enable=true" -}}
+{{ $filter := "caddy.enable=true" -}}
 {{- $hostPattern := "caddy\.reverse_proxy\.host=(.*)" -}}
 {{- range $service := nomadServices -}}
-  {{- if containsAll $filter $service.Tags -}}
+  {{- if $service.Tags | contains $filter -}}
     {{- range $tag := $service.Tags -}}
       {{- if $tag | regexMatch $hostPattern -}}
-        {{- $host = $tag | regexReplaceAll $hostPattern "$1" -}}
 
-{{ $host }} {
+{{ $tag | regexReplaceAll $hostPattern "$1" }} {
   reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
 

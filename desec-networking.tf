@@ -67,22 +67,6 @@ resource "desec_rrset" "syngnathus_caprover_a" {
   ttl     = 3600
 }
 
-resource "desec_rrset" "fluitans_a" {
-  domain  = desec_domain.root.name
-  subname = "fluitans"
-  type    = "A"
-  records = ["49.12.214.144"]
-  ttl     = 3600
-}
-
-resource "desec_rrset" "fluitans_aaaa" {
-  domain  = desec_domain.root.name
-  subname = "fluitans"
-  type    = "AAAA"
-  records = ["2a01:4f8:c010:a153::"]
-  ttl     = 3600
-}
-
 resource "desec_rrset" "live_a" {
   domain  = desec_domain.root.name
   subname = "live"
@@ -125,9 +109,19 @@ resource "desec_rrset" "gcp_us_west1_a_1_a" {
 
 # Services
 
-resource "desec_rrset" "service_nomad" {
+resource "desec_rrset" "service_nomad_a" {
   domain  = desec_domain.infra.name
   subname = "nomad.s"
+  type    = "A"
+  records = [google_compute_address.us_west1_a_1.address]
+  ttl     = 3600
+}
+
+# Applications
+
+resource "desec_rrset" "fluitans_a" {
+  domain  = desec_domain.root.name
+  subname = "fluitans"
   type    = "A"
   records = [google_compute_address.us_west1_a_1.address]
   ttl     = 3600

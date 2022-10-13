@@ -51,15 +51,15 @@ job "caddy" {
 
         mount {
           type     = "bind"
-          target   = "/etc/caddy/infra.cert"
-          source   = "$${NOMAD_SECRETS_DIR}/infra.cert"
+          target   = "/secrets/infra.cert"
+          source   = "secrets/infra.cert"
           readonly = true
         }
 
         mount {
           type     = "bind"
-          target   = "/etc/caddy/infra.key"
-          source   = "$${NOMAD_SECRETS_DIR}/infra.key"
+          target   = "/secrets/infra.key"
+          source   = "secrets/infra.key"
           readonly = true
         }
       }
@@ -80,7 +80,7 @@ EOH
         data = <<EOH
 ${infra_certificate}
 EOH
-        destination = "$${NOMAD_SECRETS_DIR}/infra.cert"
+        destination = "secrets/infra.cert"
         change_mode   = "script"
         change_script {
           command = "caddy"
@@ -92,7 +92,7 @@ EOH
         data = <<EOH
 ${infra_private_key}
 EOH
-        destination = "$${NOMAD_SECRETS_DIR}/infra.key"
+        destination = "secrets/infra.key"
         change_mode   = "script"
         change_script {
           command = "caddy"

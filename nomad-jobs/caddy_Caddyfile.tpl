@@ -14,7 +14,7 @@ nomad.s.foundations.infra.sargassum.world,
 nomad.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
   reverse_proxy localhost:4646
 
-  tls "/etc/caddy/infra.cert" "/etc/caddy/infra.key"
+  tls "/secrets/infra.cert" "/secrets/infra.key"
 }
 
 # Service Hello World (HTTP)
@@ -23,7 +23,7 @@ hello.s.foundations.infra.sargassum.world:80,
 hello.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world:80 {
   respond "hello, http!"
 
-  tls "/etc/caddy/infra.cert" "/etc/caddy/infra.key"
+  tls "/secrets/infra.cert" "/secrets/infra.key"
 }
 
 # Service Hello World (HTTPS)
@@ -32,7 +32,7 @@ hello-https.s.foundations.infra.sargassum.world,
 hello-https.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
   respond "hello, https!"
 
-  tls "/etc/caddy/infra.cert" "/etc/caddy/infra.key"
+  tls "/secrets/infra.cert" "/secrets/infra.key"
 }
 
 {{- $enableFilterMatch := "caddy.enable=true" -}}
@@ -58,7 +58,7 @@ hello-https.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
 {{ $service.Name | toLower }}.s.foundations.infra.sargassum.world {
   reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 
-  tls "/etc/caddy/infra.cert" "/etc/caddy/infra.key"
+  tls "/secrets/infra.cert" "/secrets/infra.key"
 }
       {{- end -}}
     {{- end -}}

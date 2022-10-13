@@ -1,4 +1,3 @@
-# Unorchestrated Services
 # TODO: replace deployment-specific strings like "sargassum.world", "foundations.infra.sargassum.world", "gcp-us-west1-a-1", etc., with template variables throughout this file
 # TODO: the public Caddy server should only bind to the public IP address, while the private Caddy server should only bind to the ZeroTier IP addresses
 
@@ -8,12 +7,6 @@ nomad.s.gcp-us-west1-a-1.d.infra.sargassum.world,
 nomad.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
   reverse_proxy localhost:4646
 }
-
-hello.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
-  respond "hello, private network!"
-}
-
-# Nomad-Orchestrated Services
 
 {{ $enableFilterMatch := "caddy.enable=true" -}}
 {{- $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}

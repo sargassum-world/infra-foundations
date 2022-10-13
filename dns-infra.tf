@@ -22,6 +22,8 @@ resource "acme_certificate" "infra_wildcards" {
   subject_alternative_names = [
     "*.s.${desec_domain.infra.name}",
     "*.d.${desec_domain.infra.name}",
+    "*.s.foundations.${desec_domain.infra.name}",
+    "*.d.foundations.${desec_domain.infra.name}",
   ]
 
   dns_challenge {

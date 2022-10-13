@@ -10,7 +10,7 @@ resource "desec_rrset" "zerotier_txt" {
 
 resource "desec_rrset" "zerotier_wildcard_a" {
   domain  = desec_domain.infra.name
-  subname = "*s.foundations.${desec_domain.infra.name}"
+  subname = "*s.foundations"
   type    = "A"
   records = desec_rrset.zerotier_device_gcp_us_west1_a_1_a.records
   ttl     = 3600
@@ -18,7 +18,7 @@ resource "desec_rrset" "zerotier_wildcard_a" {
 
 resource "desec_rrset" "zerotier_wildcard_aaaa" {
   domain  = desec_domain.infra.name
-  subname = "*s.foundations.${desec_domain.infra.name}"
+  subname = "*s.foundations"
   type    = "AAAA"
   records = desec_rrset.zerotier_device_gcp_us_west1_a_1_aaaa.records
   ttl     = 3600

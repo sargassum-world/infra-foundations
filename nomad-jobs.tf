@@ -19,20 +19,15 @@ resource "nomad_job" "zerotier_agent" {
   }
 }
 
-data "local_file" "caddy_public_caddyfile" {
-  filename = "${path.module}/nomad-jobs/caddy_public_Caddyfile.tpl"
-}
-
-data "local_file" "caddy_ztoverlay_caddyfile" {
-  filename = "${path.module}/nomad-jobs/caddy_ztoverlay_Caddyfile.tpl"
+data "local_file" "caddy_caddyfile" {
+  filename = "${path.module}/nomad-jobs/caddy_Caddyfile.tpl"
 }
 
 resource "nomad_job" "caddy" {
   jobspec = templatefile("${path.module}/nomad-jobs/caddy.hcl.tftpl", {
-    group               = "gcp_us_west1_a_1"
-    affinity            = google_compute_instance.us_west1_a_1.name
-    public_caddyfile    = data.local_file.caddy_public_caddyfile.content
-    ztoverlay_caddyfile = data.local_file.caddy_ztoverlay_caddyfile.content
+    group     = "gcp_us_west1_a_1"
+    affinity  = google_compute_instance.us_west1_a_1.name
+    caddyfile = data.local_file.caddy_caddyfile.content
   })
 
   hcl2 {

@@ -48,6 +48,13 @@ job "caddy" {
           source   = "local/Caddyfile"
           readonly = true
         }
+
+        mount {
+          type     = "bind"
+          target   = "/secrets"
+          source   = "$${NOMAD_SECRETS_DIR}"
+          readonly = true
+        }
       }
 
       template {
@@ -60,6 +67,20 @@ EOH
           command = "caddy"
           args    = ["reload"]
         }
+      }
+
+      template {
+        data = <<EOH
+${infra_certificate}
+EOH
+        destination = "$${NOMAD_SECRETS_DIR}/infra.cert"
+      }
+
+      template {
+        data = <<EOH
+${infra_private_key}
+EOH
+        destination = "$${NOMAD_SECRETS_DIR}/infra.key"
       }
 
       resources {

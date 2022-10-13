@@ -16,7 +16,7 @@ hello.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
 # Nomad-Orchestrated Services
 
 {{ $enableFilterMatch := "caddy.enable=true" -}}
-{{ $public := "caddy.reverse_proxy.public=true" -}}
+{{ $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}
 {{- $customHostFilterPattern := `caddy\.reverse_proxy\.host=(.*)` -}}
 
 {{ range $serviceInfo := nomadServices -}}

@@ -18,17 +18,17 @@ hello.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
 {{ $enableFilterMatch := "caddy.enable=true" -}}
 {{- $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}
 {{- $customHostFilterPattern := `caddy\.reverse_proxy\.host=(.*)` -}}
-
 {{- range $serviceInfo := nomadServices -}}
-  {{- if $serviceInfo.Tags | contains $enableFilterMatch -}}
-    {{- range $tag := $serviceInfo.Tags -}}
-      {{- if $tag | regexMatch $customHostFilterPattern -}}
-        {{- range $service := nomadService $serviceInfo.Name }}
+  {{- if $serviceInfo.Tags | contains $enableFilterMatch }}
+# Service {{ $serviceInfo.Name }}
+    {{ if $serviceInfo.Tags | contains $publicFilterMatch -}}
+      {{- range $tag := $serviceInfo.Tags -}}
+        {{- if $tag | regexMatch $customHostFilterPattern -}}
+          {{- range $service := nomadService $serviceInfo.Name }}
 {{ $tag | regexReplaceAll $customHostFilterPattern "$1" }},
+          {{- end -}}
         {{- end -}}
       {{- end -}}
-    {{- end -}}
-    {{- if $serviceInfo.Tags | contains $publicFilterMatch -}}
       {{- range $service := nomadService $serviceInfo.Name }}
 {{ $service.Name | toLower }}.s.sargassum.world,
       {{- end -}}

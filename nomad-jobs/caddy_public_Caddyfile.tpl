@@ -17,11 +17,14 @@ nomad.s.infra.sargassum.world {
 }
 
 # TODO: enable DNS wildcarding for *.s.infra.sargassum.world in DNS records and make it work with HTTPS
-{{- range $service := nomadServices -}}
-  {{- if $service.Tags | contains $filter -}}
+{{- range := nomadServices -}}
+  {{- if .Tags | contains $filter -}}
 
-{{ $service.Name | toLower }}.s.infra.sargassum.world {
-  reverse_proxy {{ $service.Address }}:{{ $service.Port }}
+{{ .Name | toLower }}.s.infra.sargassum.world {
+
+    {{- range nomadService .Name }}
+  reverse_proxy {{ .Address }}:{{ .Port }}
+    {{- end }}
 }
 
   {{- end -}}

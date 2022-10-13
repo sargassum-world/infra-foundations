@@ -1,10 +1,11 @@
-# TODO: replace deployment-specific strings like "sargassum.world", "foundations.infra.sargassum.world", "gcp-us-west1-a-1", etc., with template variables throughout this file
-# TODO: the public Caddy server should only bind to the public IP address, while the private Caddy server should only bind to the ZeroTier IP addresses
+# TODO: replace deployment-specific strings with template variables throughout this file
+{
+  default_bind 10.64.0.46
+}
 
+# Service Nomad
 nomad.s.infra.sargassum.world,
-nomad.s.foundations.infra.sargassum.world,
-nomad.s.gcp-us-west1-a-1.d.infra.sargassum.world,
-nomad.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
+nomad.s.gcp-us-west1-a-1.d.infra.sargassum.world {
   reverse_proxy localhost:4646
 }
 
@@ -24,13 +25,10 @@ nomad.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
         {{- end -}}
       {{- end -}}
       {{- range $service := nomadService $serviceInfo.Name }}
-{{ $service.Name | toLower }}.s.sargassum.world,
-      {{- end -}}
-    {{- end -}}
-    {{- range $service := nomadService $serviceInfo.Name }}
-{{ $service.Name | toLower }}.s.foundations.infra.sargassum.world {
+{{ $service.Name | toLower }}.s.sargassum.world {
   reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
+      {{- end -}}
     {{- end -}}
   {{- end -}}
-{{- end }}
+{{- end -}}

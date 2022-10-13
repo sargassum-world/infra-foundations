@@ -74,6 +74,11 @@ EOH
 ${infra_certificate}
 EOH
         destination = "$${NOMAD_SECRETS_DIR}/infra.cert"
+        change_mode   = "script"
+        change_script {
+          command = "caddy"
+          args    = ["reload"]
+        }
       }
 
       template {
@@ -81,6 +86,11 @@ EOH
 ${infra_private_key}
 EOH
         destination = "$${NOMAD_SECRETS_DIR}/infra.key"
+        change_mode   = "script"
+        change_script {
+          command = "caddy"
+          args    = ["reload"]
+        }
       }
 
       resources {

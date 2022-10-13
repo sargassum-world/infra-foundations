@@ -28,7 +28,7 @@ resource "nomad_job" "caddy" {
     group             = "gcp_us_west1_a_1"
     affinity          = google_compute_instance.us_west1_a_1.name
     caddyfile         = data.local_file.caddy_caddyfile.content
-    infra_certificate = "${acme_certificate.infra_all_wildcards.certificate_pem}${acme_certificate.infra_all_wildcards.issuer_pem}"
+    infra_certificate = "${acme_certificate.infra_all_wildcards.certificate_pem}"
     infra_private_key = acme_certificate.infra_all_wildcards.private_key_pem
   })
 

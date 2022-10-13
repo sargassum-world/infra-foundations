@@ -10,7 +10,7 @@ gcp-us-west1-a-1.d.foundations.infra.sargassum.world:80 {
 
 # Infrastructure Services
 
-{{- $filter := "caddy.enable=true"}}
+{{- $filter := "caddy.enable=true" }}
 
 nomad.s.infra.sargassum.world {
   reverse_proxy localhost:4646
@@ -24,22 +24,5 @@ nomad.s.infra.sargassum.world {
   reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
 
-  {{- end -}}
-{{- end }}
-
-# Nomad-Orchestrated Services
-
-{{- $hostPattern := "caddy\.reverse_proxy\.host=(.*)" -}}
-{{- range $service := nomadServices -}}
-  {{- if $service.Tags | contains $filter -}}
-    {{- range $tag := $service.Tags -}}
-      {{- if $tag | regexMatch $hostPattern -}}
-
-{{ $tag | regexReplaceAll $hostPattern "$1" }} {
-  reverse_proxy {{ $service.Address }}:{{ $service.Port }}
-}
-
-      {{- end -}}
-    {{- end -}}
   {{- end -}}
 {{- end }}

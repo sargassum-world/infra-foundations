@@ -65,3 +65,5 @@ resource "google_compute_instance" "us_west1_a_1" {
     enable_integrity_monitoring = true
   }
 }
+
+# TODO: add a machine with a "worker" image (i.e. only a Nomad client with a Caddy reverse proxy) to run high-bandwidth/compute services for live.sargassum.world under soe-sargassum-planktoscope (for billing reasons)

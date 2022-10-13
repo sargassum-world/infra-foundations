@@ -13,6 +13,16 @@ variable "desec_api_token" {
   sensitive   = true
 }
 
+variable "acme_server" {
+  type        = string
+  description = "ACME CA server API path"
+}
+
+variable "acme_email" {
+  type        = string
+  description = "Contaact email address for ACME registration"
+}
+
 variable "gcp_billing_account_id" {
   type        = string
   description = "GCP billing account ID"

@@ -17,7 +17,7 @@ resource "desec_rrset" "infra_ds" {
 
 # Services
 
-resource "desec_rrset" "device_gcp_us_west1_a_1_services_a" {
+resource "desec_rrset" "device_gcp_us_west1_a_1_services_wildcard_a" {
   domain  = desec_domain.root.name
   subname = "*.s"
   type    = "A"
@@ -28,16 +28,8 @@ resource "desec_rrset" "device_gcp_us_west1_a_1_services_a" {
 # HTTPS DNS Challenge
 # Needed for HTTPS with *.s.sargassum.world
 
-resource "tls_private_key" "dns_acme" {
-  algorithm = "RSA"
-}
-
-resource "acme_registration" "dns" {
-  account_key_pem = tls_private_key.dns_acme.private_key_pem
-  email_address   = var.acme_email
-}
-
-resource "acme_certificate" "services" {
+# FIXME: Are there any security holes with this approach compared to using Caddy for the DNS challenge?
+resource "acme_certificate" "root_wildcards" {
   account_key_pem           = acme_registration.dns.account_key_pem
   common_name               = desec_domain.root.name
   subject_alternative_names = ["*.s.${desec_domain.root.name}"]

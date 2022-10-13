@@ -17,14 +17,33 @@ nomad.s.infra.sargassum.world {
 }
 
 # TODO: enable DNS wildcarding for *.s.infra.sargassum.world in DNS records and make it work with HTTPS
-{{- range nomadServices -}}
-  {{- if .Tags | contains $filter -}}
-    {{- range nomadService .Name -}}
+{{ range $serviceInfo := nomadServices -}}
+  {{- if $serviceInfo.Tags | contains $filter -}}
+    {{- range $service := nomadService $serviceInfo.Name -}}
 
-{{ .Name | toLower }}.s.infra.sargassum.world {
-  reverse_proxy {{ .Address }}:{{ .Port }}
+{{ $service.Name | toLower }}.s.infra.sargassum.world {
+  reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
 
+    {{- end -}}
+  {{- end -}}
+{{- end }}
+
+# Nomad-Orchestrated Services
+
+{{ $hostPattern := `caddy\.reverse_proxy\.host=(.*)` -}}
+{{- range $serviceInfo := nomadServices -}}
+  {{- if $serviceInfo.Tags | contains $filter -}}
+    {{- range $tag := $serviceInfo.Tags -}}
+      {{- if $tag | regexMatch $hostPattern -}}
+        {{- range $service := nomadService $serviceInfo.Name -}}
+
+{{ $tag | regexReplaceAll $hostPattern "$1" }} {
+  reverse_proxy {{ $service.Address }}:{{ $service.Port }}
+}
+
+        {{- end -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
 {{- end }}

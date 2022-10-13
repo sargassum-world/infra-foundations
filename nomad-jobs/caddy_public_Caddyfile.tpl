@@ -31,7 +31,6 @@ hello.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world:80 {
 
     {{- end -}}
   {{- end -}}
-  {{- end -}}
 {{- end }}
 
 # Nomad-Orchestrated Services with Custom Names

@@ -16,7 +16,7 @@ resource "desec_rrset" "service_nomad_a" {
 # Needed for HTTPS with *.s.infra.sargassum.world and *.d.infra.sargassum.world
 
 # FIXME: Are there any security holes with this approach compared to using Caddy for the DNS challenge?
-resource "acme_certificate" "infra_wildcards" {
+resource "acme_certificate" "infra_all_wildcards" {
   account_key_pem = acme_registration.dns.account_key_pem
   common_name     = desec_domain.infra.name
   subject_alternative_names = [

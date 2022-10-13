@@ -8,11 +8,12 @@ nomad.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
   reverse_proxy localhost:4646
 }
 
-{{ $enableFilterMatch := "caddy.enable=true" -}}
+{{- $enableFilterMatch := "caddy.enable=true" -}}
 {{- $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}
 {{- $customHostFilterPattern := `caddy\.reverse_proxy\.host=(.*)` -}}
 {{- range $serviceInfo := nomadServices -}}
   {{- if $serviceInfo.Tags | contains $enableFilterMatch }}
+
 # Service {{ $serviceInfo.Name }}
     {{ if $serviceInfo.Tags | contains $publicFilterMatch -}}
       {{- range $tag := $serviceInfo.Tags -}}

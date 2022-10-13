@@ -22,8 +22,6 @@ nomad.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
 hello.s.foundations.infra.sargassum.world:80,
 hello.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world:80 {
   respond "hello, http!"
-
-  tls "/secrets/infra.cert" "/secrets/infra.key"
 }
 
 # Service Hello World (HTTPS)

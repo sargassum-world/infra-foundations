@@ -18,7 +18,8 @@ job "zerotier_agent" {
       mode = "host"
 
       port "zerotier" {
-        static = 9993
+        static       = 9993
+        host_network = "public"
       }
     }
 

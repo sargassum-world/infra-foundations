@@ -17,12 +17,24 @@ job "caddy" {
     network {
       mode = "host"
 
-      port "http" {
-        static = 80
+      port "public_http" {
+        static       = 80
+        host_network = "public"
       }
 
-      port "https" {
-        static = 443
+      port "public_https" {
+        static       = 443
+        host_network = "public"
+      }
+
+      port "ztoverlay_http" {
+        static       = 80
+        host_network = "ztoverlay"
+      }
+
+      port "ztoverlay_https" {
+        static       = 443
+        host_network = "ztoverlay"
       }
     }
 
@@ -32,7 +44,7 @@ job "caddy" {
       config {
         image        = "caddy:2.6.1"
         network_mode = "host"
-        ports        = ["http", "https"]
+        ports        = ["public_http", "public_https"]
         cap_add      = ["net_bind_service"]
 
         mount {
@@ -69,19 +81,19 @@ EOH
       }
     }
 
-    task "private" {
+    task "ztoverlay" {
       driver = "docker"
 
       config {
         image        = "caddy:2.6.1"
         network_mode = "host"
-        ports        = ["http", "https"]
+        ports        = ["ztoverlay_http", "ztoverlay_https"]
         cap_add      = ["net_bind_service"]
 
         mount {
           type     = "volume"
           target   = "/data"
-          source   = "caddy_private-data"
+          source   = "caddy_ztoverlay-data"
           readonly = false
         }
 
@@ -95,7 +107,7 @@ EOH
 
       template {
         data          = <<EOH
-${private_caddyfile}
+${ztoverlay_caddyfile}
 EOH
         destination   = "local/Caddyfile"
         change_mode   = "script"

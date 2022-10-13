@@ -1,9 +1,10 @@
 # TODO: replace deployment-specific strings with template variables throughout this file
 {
-  default_bind 10.64.0.46
+  acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
 }
 
 # Service Nomad
+
 nomad.s.infra.sargassum.world,
 nomad.s.gcp-us-west1-a-1.d.infra.sargassum.world {
   reverse_proxy localhost:4646

@@ -16,10 +16,10 @@ hello.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
 # Nomad-Orchestrated Services
 
 {{ $enableFilterMatch := "caddy.enable=true" -}}
-{{ $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}
+{{- $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}
 {{- $customHostFilterPattern := `caddy\.reverse_proxy\.host=(.*)` -}}
 
-{{ range $serviceInfo := nomadServices -}}
+{{- range $serviceInfo := nomadServices -}}
   {{- if $serviceInfo.Tags | contains $enableFilterMatch -}}
     {{- range $tag := $serviceInfo.Tags -}}
       {{- if $tag | regexMatch $customHostFilterPattern -}}
@@ -38,12 +38,5 @@ hello.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
   reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
     {{- end -}}
-  {{- end -}}
-{{- end }}
-
-# Nomad-Orchestrated Services with Custom Names
-
-{{ range $serviceInfo := nomadServices -}}
-  {{- if $serviceInfo.Tags | contains $enableFilterMatch -}}
   {{- end -}}
 {{- end }}

@@ -51,8 +51,15 @@ job "caddy" {
 
         mount {
           type     = "bind"
-          target   = "/secrets"
-          source   = "$${NOMAD_SECRETS_DIR}"
+          target   = "/etc/caddy/infra.cert"
+          source   = "$${NOMAD_SECRETS_DIR}/infra.cert"
+          readonly = true
+        }
+
+        mount {
+          type     = "bind"
+          target   = "/etc/caddy/infra.key"
+          source   = "$${NOMAD_SECRETS_DIR}/infra.key"
           readonly = true
         }
       }

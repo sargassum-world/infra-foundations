@@ -17,7 +17,7 @@ nomad.s.infra.sargassum.world {
 }
 
 # TODO: enable DNS wildcarding for *.s.infra.sargassum.world in DNS records and make it work with HTTPS
-{{- range := nomadServices -}}
+{{- range nomadServices -}}
   {{- if .Tags | contains $filter -}}
 
 {{ .Name | toLower }}.s.infra.sargassum.world {

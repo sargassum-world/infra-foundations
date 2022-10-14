@@ -71,8 +71,8 @@ EOH
         destination   = "local/Caddyfile"
         change_mode   = "script"
         change_script {
-          command = "/bin/sh" # for some reason change_script can't find /usr/bin/caddy
-          args    = ["-c", "'/usr/bin/caddy reload /etc/caddy/Caddyfile'"]
+          command = "/usr/bin/caddy"
+          args    = ["reload", "--config", "/etc/caddy/Caddyfile"]
         }
       }
 
@@ -83,8 +83,8 @@ EOH
         destination = "secrets/ztoverlay.crt"
         change_mode   = "script"
         change_script {
-          command = "/bin/sh" # for some reason change_script can't find /usr/bin/caddy
-          args    = ["-c", "'/usr/bin/caddy reload /etc/caddy/Caddyfile'"]
+          command = "/usr/bin/caddy"
+          args    = ["reload", "--config", "/etc/caddy/Caddyfile"]
         }
       }
 
@@ -95,8 +95,8 @@ EOH
         destination = "secrets/ztoverlay.key"
         change_mode   = "script"
         change_script {
-          command = "/bin/sh" # for some reason change_script can't find /usr/bin/caddy
-          args    = ["-c", "'/usr/bin/caddy reload /etc/caddy/Caddyfile'"]
+          command = "/usr/bin/caddy"
+          args    = ["reload", "--config", "/etc/caddy/Caddyfile"]
         }
       }
 

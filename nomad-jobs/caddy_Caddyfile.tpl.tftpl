@@ -1,48 +1,48 @@
 # TODO: replace deployment-specific strings with template variables throughout this file
 {
-  email "${acme_email}"
+	email "${acme_email}"
 }
 
 # Service Nomad
 
 nomad.s.infra.${root_domain},
 nomad.s.${device_subname}.d.infra.${root_domain} {
-  reverse_proxy localhost:4646
+	reverse_proxy localhost:4646
 }
 
 nomad.s.foundations.infra.${root_domain},
 nomad.s.${device_subname}.d.foundations.infra.${root_domain} {
-  reverse_proxy localhost:4646
+	reverse_proxy localhost:4646
 
-  tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
+	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
 
 {{- $enableFilterMatch := "caddy.enable=true" -}}
 {{- $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}
 {{- $customHostFilterPattern := `caddy\.reverse_proxy\.host=(.*)` -}}
 {{- range $serviceInfo := nomadServices -}}
-  {{- if $serviceInfo.Tags | contains $enableFilterMatch }}
+	{{- if $serviceInfo.Tags | contains $enableFilterMatch }}
 
 # Service {{ $serviceInfo.Name }}
-    {{ if $serviceInfo.Tags | contains $publicFilterMatch -}}
-      {{- range $tag := $serviceInfo.Tags -}}
-        {{- if $tag | regexMatch $customHostFilterPattern -}}
-          {{- range $service := nomadService $serviceInfo.Name }}
+		{{ if $serviceInfo.Tags | contains $publicFilterMatch -}}
+			{{- range $tag := $serviceInfo.Tags -}}
+				{{- if $tag | regexMatch $customHostFilterPattern -}}
+					{{- range $service := nomadService $serviceInfo.Name }}
 {{ $tag | regexReplaceAll $customHostFilterPattern "$1" }},
-          {{- end -}}
-        {{- end -}}
-      {{- end -}}
-      {{- range $service := nomadService $serviceInfo.Name }}
+					{{- end -}}
+				{{- end -}}
+			{{- end -}}
+			{{- range $service := nomadService $serviceInfo.Name }}
 {{ $service.Name | toLower }}.s.${root_domain} {
-  reverse_proxy {{ $service.Address }}:{{ $service.Port }}
+	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
 
 {{ $service.Name | toLower }}.s.foundations.infra.${root_domain} {
-  reverse_proxy {{ $service.Address }}:{{ $service.Port }}
+	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 
-  tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
+	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
-      {{- end -}}
-    {{- end -}}
-  {{- end -}}
+			{{- end -}}
+		{{- end -}}
+	{{- end -}}
 {{- end -}}

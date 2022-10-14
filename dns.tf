@@ -17,7 +17,7 @@ resource "desec_rrset" "infra_ds" {
 
 # Services
 
-resource "desec_rrset" "device_gcp_us_west1_a_1_services_wildcard_a" {
+resource "desec_rrset" "root_services_wildcard_a" {
   domain  = desec_domain.root.name
   subname = "*.s"
   type    = "A"

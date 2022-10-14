@@ -23,7 +23,7 @@ resource "nomad_job" "caddy" {
   jobspec = templatefile("${path.module}/nomad-jobs/caddy.hcl.tftpl", {
     group                 = "gcp_us_west1_a_1"
     affinity              = google_compute_instance.us_west1_a_1.name
-    ztoverlay_certificate = acme_certificate.zerotier_wildcards.certificate_pem
+    ztoverlay_certificate = "${acme_certificate.zerotier_wildcards.certificate_pem}${acme_certificate.zerotier_wildcards.issuer_pem}"
     ztoverlay_private_key = acme_certificate.zerotier_wildcards.private_key_pem
     caddyfile = templatefile("${path.module}/nomad-jobs/caddy_Caddyfile.tpl.tftpl", {
       root_domain    = desec_domain.root.name

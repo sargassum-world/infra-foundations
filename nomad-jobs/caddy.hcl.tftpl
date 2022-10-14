@@ -72,7 +72,7 @@ EOH
         change_mode   = "script"
         change_script {
           command = "/bin/sh" # for some reason change_script can't find /usr/bin/caddy
-          args    = ["-c", "'caddy reload'"]
+          args    = ["-c", "'/usr/bin/caddy reload /etc/caddy/Caddyfile'"]
         }
       }
 
@@ -84,7 +84,7 @@ EOH
         change_mode   = "script"
         change_script {
           command = "/bin/sh" # for some reason change_script can't find /usr/bin/caddy
-          args    = ["-c", "'caddy reload'"]
+          args    = ["-c", "'/usr/bin/caddy reload /etc/caddy/Caddyfile'"]
         }
       }
 
@@ -96,7 +96,7 @@ EOH
         change_mode   = "script"
         change_script {
           command = "/bin/sh" # for some reason change_script can't find /usr/bin/caddy
-          args    = ["-c", "'caddy reload'"]
+          args    = ["-c", "'/usr/bin/caddy reload /etc/caddy/Caddyfile'"]
         }
       }
 

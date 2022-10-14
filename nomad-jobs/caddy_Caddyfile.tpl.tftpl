@@ -19,6 +19,7 @@ nomad.s.${device_subname}.d.foundations.infra.${root_domain} {
 
 {{- $enableFilterMatch := "caddy.enable=true" -}}
 {{- $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}
+{{- $customHostsFilterMatch := "caddy.reverse_proxy.custom_hosts=true" -}}
 {{- $customHostFilterPattern := `caddy\.reverse_proxy\.host=(.*)` -}}
 {{- range $serviceInfo := nomadServices -}}
 	{{- if $serviceInfo.Tags | contains $enableFilterMatch }}
@@ -26,10 +27,12 @@ nomad.s.${device_subname}.d.foundations.infra.${root_domain} {
 # Service {{ $serviceInfo.Name }}
 		{{ if $serviceInfo.Tags | contains $publicFilterMatch -}}
 
-			{{- range $tag := $serviceInfo.Tags -}}
-				{{- if $tag | regexMatch $customHostFilterPattern -}}
-					{{- range $service := nomadService $serviceInfo.Name }}
+			{{- if $serviceInfo.Tags | contains $customHostsFilterMatch -}}
+				{{- range $tag := $serviceInfo.Tags -}}
+					{{- if $tag | regexMatch $customHostFilterPattern -}}
+						{{- range $service := nomadService $serviceInfo.Name }}
 {{ $tag | regexReplaceAll $customHostFilterPattern "$1" }},
+						{{- end -}}
 					{{- end -}}
 				{{- end -}}
 			{{- end -}}

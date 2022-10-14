@@ -25,6 +25,7 @@ nomad.s.${device_subname}.d.foundations.infra.${root_domain} {
 
 # Service {{ $serviceInfo.Name }}
 		{{ if $serviceInfo.Tags | contains $publicFilterMatch -}}
+
 			{{- range $tag := $serviceInfo.Tags -}}
 				{{- if $tag | regexMatch $customHostFilterPattern -}}
 					{{- range $service := nomadService $serviceInfo.Name }}
@@ -32,17 +33,20 @@ nomad.s.${device_subname}.d.foundations.infra.${root_domain} {
 					{{- end -}}
 				{{- end -}}
 			{{- end -}}
+
 			{{- range $service := nomadService $serviceInfo.Name }}
 {{ $service.Name | toLower }}.s.${root_domain} {
 	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
+			{{- end -}}
+		{{- end -}}
 
+		{{- range $service := nomadService $serviceInfo.Name }}
 {{ $service.Name | toLower }}.s.foundations.infra.${root_domain} {
 	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
-			{{- end -}}
 		{{- end -}}
 	{{- end -}}
 {{- end -}}

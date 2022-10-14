@@ -25,24 +25,6 @@ resource "desec_rrset" "root_services_wildcard_a" {
   ttl     = 3600
 }
 
-# HTTPS DNS Challenge
-# Needed for HTTPS with *.s.sargassum.world
-
-# FIXME: Are there any security holes with this approach compared to using Caddy for the DNS challenge?
-resource "acme_certificate" "root_wildcards" {
-  account_key_pem           = acme_registration.main.account_key_pem
-  common_name               = desec_domain.root.name
-  subject_alternative_names = ["*.s.${desec_domain.root.name}"]
-
-  dns_challenge {
-    provider = "desec"
-    config = {
-      DESEC_TOKEN = var.desec_api_token
-      DESEC_TTL   = 3600
-    }
-  }
-}
-
 # SendGrid DNS challenge
 # Needed for fider.sargassum.world
 

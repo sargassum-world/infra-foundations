@@ -51,15 +51,15 @@ job "caddy" {
 
         mount {
           type     = "bind"
-          target   = "/secrets/infra.crt"
-          source   = "secrets/infra.crt"
+          target   = "/secrets/ztoverlay.crt"
+          source   = "secrets/ztoverlay.crt"
           readonly = true
         }
 
         mount {
           type     = "bind"
-          target   = "/secrets/infra.key"
-          source   = "secrets/infra.key"
+          target   = "/secrets/ztoverlay.key"
+          source   = "secrets/ztoverlay.key"
           readonly = true
         }
       }
@@ -78,9 +78,9 @@ EOH
 
       template {
         data = <<EOH
-${infra_certificate}
+${ztoverlay_certificate}
 EOH
-        destination = "secrets/infra.crt"
+        destination = "secrets/ztoverlay.crt"
         change_mode   = "script"
         change_script {
           command = "caddy"
@@ -90,9 +90,9 @@ EOH
 
       template {
         data = <<EOH
-${infra_private_key}
+${ztoverlay_private_key}
 EOH
-        destination = "secrets/infra.key"
+        destination = "secrets/ztoverlay.key"
         change_mode   = "script"
         change_script {
           command = "caddy"

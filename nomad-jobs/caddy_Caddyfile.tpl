@@ -8,15 +8,13 @@
 nomad.s.infra.sargassum.world,
 nomad.s.gcp-us-west1-a-1.d.infra.sargassum.world {
   reverse_proxy localhost:4646
-
-  tls "/secrets/infra.crt" "/secrets/infra.key"
 }
 
 nomad.s.foundations.infra.sargassum.world,
 nomad.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
   reverse_proxy localhost:4646
 
-  tls "/secrets/infra.crt" "/secrets/infra.key"
+  tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
 
 {{- $enableFilterMatch := "caddy.enable=true" -}}
@@ -37,16 +35,12 @@ nomad.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
       {{- range $service := nomadService $serviceInfo.Name }}
 {{ $service.Name | toLower }}.s.sargassum.world {
   reverse_proxy {{ $service.Address }}:{{ $service.Port }}
-
-  tls {
-    issuer acme
-  }
 }
 
 {{ $service.Name | toLower }}.s.foundations.infra.sargassum.world {
   reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 
-  tls "/secrets/infra.crt" "/secrets/infra.key"
+  tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
       {{- end -}}
     {{- end -}}

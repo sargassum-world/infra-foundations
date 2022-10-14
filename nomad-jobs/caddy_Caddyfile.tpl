@@ -1,6 +1,7 @@
 # TODO: replace deployment-specific strings with template variables throughout this file
 {
-  acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+  # acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+  email "lietk12@gmail.com"
 }
 
 # Service Nomad
@@ -8,6 +9,8 @@
 nomad.s.infra.sargassum.world,
 nomad.s.gcp-us-west1-a-1.d.infra.sargassum.world {
   reverse_proxy localhost:4646
+
+  tls acme
 }
 
 nomad.s.foundations.infra.sargassum.world,
@@ -51,6 +54,8 @@ hello-https.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
       {{- range $service := nomadService $serviceInfo.Name }}
 {{ $service.Name | toLower }}.s.sargassum.world {
   reverse_proxy {{ $service.Address }}:{{ $service.Port }}
+
+  tls acme
 }
 
 {{ $service.Name | toLower }}.s.foundations.infra.sargassum.world {

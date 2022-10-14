@@ -48,3 +48,13 @@ variable "nomad_accessor_id" {
   type        = string
   description = "Accessor ID for Nomad ACL token"
 }
+
+variable "dns_root" {
+  type        = string
+  description = "Root domain name"
+}
+
+variable "dns_infra_ds" {
+  type        = list(string)
+  description = "DS records for the infra subname under the root domain name"
+}

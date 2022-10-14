@@ -1,5 +1,5 @@
 resource "desec_domain" "root" {
-  name = "sargassum.world"
+  name = var.dns_root
 }
 
 # Sub-Zones
@@ -8,11 +8,8 @@ resource "desec_rrset" "infra_ds" {
   domain  = desec_domain.root.name
   subname = "infra"
   type    = "DS"
-  records = [
-    "23015 13 2 3ded016af87b9a6627d269d5b160e384d5f25b9daf84803b14122ddd1628661b",
-    "23015 13 4 1955d438ee865700d761d741d8a279dfc5ff1d488614cd70cea585b89fea2be1360333e7eb29f319acd95e55ac5ba94d",
-  ]
-  ttl = 3600
+  records = var.dns_infra_ds
+  ttl     = 3600
 }
 
 # Services
@@ -27,6 +24,7 @@ resource "desec_rrset" "root_services_wildcard_a" {
 
 # SendGrid DNS challenge
 # Needed for fider.sargassum.world
+# TODO: can we make Terraform obtain the subnames and records to set from SendGrid?
 
 resource "desec_rrset" "sendgrid_cname" {
   domain  = desec_domain.root.name

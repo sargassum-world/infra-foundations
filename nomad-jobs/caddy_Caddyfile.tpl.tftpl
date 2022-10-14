@@ -1,17 +1,17 @@
 # TODO: replace deployment-specific strings with template variables throughout this file
 {
-  email "lietk12@gmail.com"
+  email "${acme_email}"
 }
 
 # Service Nomad
 
-nomad.s.infra.sargassum.world,
-nomad.s.gcp-us-west1-a-1.d.infra.sargassum.world {
+nomad.s.infra.${root_domain},
+nomad.s.${device_subname}.d.infra.${root_domain} {
   reverse_proxy localhost:4646
 }
 
-nomad.s.foundations.infra.sargassum.world,
-nomad.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
+nomad.s.foundations.infra.${root_domain},
+nomad.s.${device_subname}.d.foundations.infra.${root_domain} {
   reverse_proxy localhost:4646
 
   tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
@@ -33,11 +33,11 @@ nomad.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
         {{- end -}}
       {{- end -}}
       {{- range $service := nomadService $serviceInfo.Name }}
-{{ $service.Name | toLower }}.s.sargassum.world {
+{{ $service.Name | toLower }}.s.${root_domain} {
   reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
 
-{{ $service.Name | toLower }}.s.foundations.infra.sargassum.world {
+{{ $service.Name | toLower }}.s.foundations.infra.${root_domain} {
   reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 
   tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"

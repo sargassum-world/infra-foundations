@@ -21,9 +21,9 @@ resource "acme_certificate" "infra_all_wildcards" {
   common_name     = desec_domain.infra.name
   subject_alternative_names = [
     "*.s.${desec_domain.infra.name}",
-    "*.d.${desec_domain.infra.name}",
+    "*.s.gcp-us-west1-a-1.d.${desec_domain.infra.name}",
     "*.s.foundations.${desec_domain.infra.name}",
-    "*.d.foundations.${desec_domain.infra.name}",
+    "*.s.gcp-us-west1-a-1.d.foundations.${desec_domain.infra.name}",
   ]
 
   dns_challenge {

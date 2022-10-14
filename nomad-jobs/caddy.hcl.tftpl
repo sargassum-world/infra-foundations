@@ -51,8 +51,8 @@ job "caddy" {
 
         mount {
           type     = "bind"
-          target   = "/secrets/infra.cert"
-          source   = "secrets/infra.cert"
+          target   = "/secrets/infra.crt"
+          source   = "secrets/infra.crt"
           readonly = true
         }
 

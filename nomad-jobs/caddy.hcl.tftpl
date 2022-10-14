@@ -44,8 +44,10 @@ job "caddy" {
 
         mount {
           type     = "bind"
-          target   = "/etc/caddy/Caddyfile"
-          source   = "local/Caddyfile"
+          # We must mount the directory so that Docker sees changes to the Caddyfile from Nomad Templates.
+          # Refer to https://github.com/hashicorp/nomad/issues/4797 for an explanation.
+          target   = "/etc/caddy/"
+          source   = "local/"
           readonly = true
         }
 

@@ -80,7 +80,7 @@ EOH
         data = <<EOH
 ${infra_certificate}
 EOH
-        destination = "secrets/infra.cert"
+        destination = "secrets/infra.crt"
         change_mode   = "script"
         change_script {
           command = "caddy"

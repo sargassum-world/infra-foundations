@@ -10,7 +10,9 @@ nomad.s.infra.sargassum.world,
 nomad.s.gcp-us-west1-a-1.d.infra.sargassum.world {
   reverse_proxy localhost:4646
 
-  tls acme
+  tls {
+    issuer acme
+  }
 }
 
 nomad.s.foundations.infra.sargassum.world,
@@ -55,7 +57,9 @@ hello-https.s.gcp-us-west1-a-1.d.foundations.infra.sargassum.world {
 {{ $service.Name | toLower }}.s.sargassum.world {
   reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 
-  tls acme
+  tls {
+    issuer acme
+  }
 }
 
 {{ $service.Name | toLower }}.s.foundations.infra.sargassum.world {

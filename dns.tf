@@ -30,7 +30,7 @@ resource "desec_rrset" "device_gcp_us_west1_a_1_services_wildcard_a" {
 
 # FIXME: Are there any security holes with this approach compared to using Caddy for the DNS challenge?
 resource "acme_certificate" "root_wildcards" {
-  account_key_pem           = acme_registration.dns.account_key_pem
+  account_key_pem           = acme_registration.main.account_key_pem
   common_name               = desec_domain.root.name
   subject_alternative_names = ["*.s.${desec_domain.root.name}"]
 

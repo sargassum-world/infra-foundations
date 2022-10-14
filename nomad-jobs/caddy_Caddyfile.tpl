@@ -1,6 +1,5 @@
 # TODO: replace deployment-specific strings with template variables throughout this file
 {
-  # acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
   email "lietk12@gmail.com"
 }
 
@@ -10,9 +9,7 @@ nomad.s.infra.sargassum.world,
 nomad.s.gcp-us-west1-a-1.d.infra.sargassum.world {
   reverse_proxy localhost:4646
 
-  tls {
-    issuer acme
-  }
+  tls "/secrets/infra.cert" "/secrets/infra.key"
 }
 
 nomad.s.foundations.infra.sargassum.world,

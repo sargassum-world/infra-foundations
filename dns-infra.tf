@@ -17,7 +17,7 @@ resource "desec_rrset" "service_nomad_a" {
 
 # FIXME: Are there any security holes with this approach compared to using Caddy for the DNS challenge?
 resource "acme_certificate" "infra_all_wildcards" {
-  account_key_pem = acme_registration.dns.account_key_pem
+  account_key_pem = acme_registration.main.account_key_pem
   common_name     = desec_domain.infra.name
   subject_alternative_names = [
     "*.s.${desec_domain.infra.name}",

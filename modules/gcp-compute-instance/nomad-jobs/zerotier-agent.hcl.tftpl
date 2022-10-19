@@ -37,11 +37,30 @@ job "zerotier_agent_${resource_name}" {
         args         = [
           "${network}",
         ]
+
+        mount {
+          type     = "bind"
+          target   = "/var/lib/zerotier-one/identity.secret"
+          source   = "secrets/identity.secret"
+          readonly = true
+        }
+
+        mount {
+          type     = "bind"
+          target   = "/var/lib/zerotier-one/identity.public"
+          source   = "local/identity.public"
+          readonly = true
+        }
       }
 
-      env {
-        ZEROTIER_IDENTITY_SECRET = "${private_key}"
-        ZEROTIER_IDENTITY_PUBLIC = "${public_key}"
+      template {
+        data = "${private_key}"
+        destination = "secrets/identity.secret"
+      }
+
+      template {
+        data = "${public_key}"
+        destination = "local/identity.public"
       }
 
       resources {

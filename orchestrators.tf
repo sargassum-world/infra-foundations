@@ -34,14 +34,17 @@ module "orchestrator_gcp_us_west1_a_1" {
   gcp_data_disk_kms_key_id = google_compute_disk.us_west1_a_1_data.disk_encryption_key[0].kms_key_self_link
   gcp_vpc_subnet_id        = module.vpc_subnetwork_gcp_us_west1.gcp_subnetwork_id
 
-  zerotier_network_id          = zerotier_network.foundations.id
-  zerotier_ipv4                = "10.144.64.1"
-  dns_root_domain_name         = desec_domain.root.name
-  dns_infra_domain_name        = desec_domain.infra.name
-  dns_zerotier_network_subname = "foundations"
-  acme_email                   = var.acme_email
-  acme_ztoverlay_certificate   = local.acme_ztoverlay_certificate
-  acme_ztoverlay_private_key   = local.acme_ztoverlay_private_key
+  zerotier_network_id = module.zerotier_network_foundations.zerotier_network_id
+  zerotier_ipv4       = "10.144.64.1"
+
+  dns_root_domain_name               = desec_domain.root.name
+  dns_infra_domain_name              = desec_domain.infra.name
+  dns_zerotier_network_subname       = module.zerotier_network_foundations.name_subname
+  dns_zerotier_network_parent_domain = module.zerotier_network_foundations.name_parent_domain
+
+  acme_email                 = var.acme_email
+  acme_ztoverlay_certificate = module.zerotier_network_foundations.acme_certificate
+  acme_ztoverlay_private_key = module.zerotier_network_foundations.acme_private_key
 
   nomad_datacenter = "sargassum-foundations"
 

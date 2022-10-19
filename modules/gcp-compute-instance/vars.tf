@@ -65,7 +65,12 @@ variable "dns_infra_domain_name" {
 
 variable "dns_zerotier_network_subname" {
   type        = string
-  description = "DNS subname for the ZeroTier network, under dns_infra_domain_name"
+  description = "DNS subname for the ZeroTier network, under dns_zerotier_network_parent_domain"
+}
+
+variable "dns_zerotier_network_parent_domain" {
+  type        = string
+  description = "Parent DNS domain name for the ZeroTier network"
 }
 
 variable "acme_email" {

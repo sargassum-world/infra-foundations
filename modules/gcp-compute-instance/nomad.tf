@@ -1,3 +1,9 @@
+resource "nomad_scheduler_config" "config" {
+  memory_oversubscription_enabled = true
+}
+
+# Jobs
+
 # TODO: move these jobs into the gcp-compute-orchestrators.tf file
 resource "nomad_job" "zerotier_agent" {
   jobspec = templatefile("${path.module}/nomad-jobs/zerotier-agent.hcl.tftpl", {

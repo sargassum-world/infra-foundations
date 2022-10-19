@@ -15,12 +15,3 @@ module "zerotier_network_foundations" {
   acme_account_key     = acme_registration.main.account_key_pem
   acme_desec_api_token = var.desec_api_token
 }
-
-# Administrative devices
-
-# TODO: specify administrative members through a Terraform variable
-resource "zerotier_member" "ethan_vulcan" {
-  name       = "ethan-vulcan"
-  member_id  = "cb1b5001de"
-  network_id = module.zerotier_network_foundations.zerotier_network_id
-}

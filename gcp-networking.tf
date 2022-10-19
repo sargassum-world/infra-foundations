@@ -1,8 +1,8 @@
-# Global Network
-
 resource "google_compute_network" "foundations" {
   name = "foundations"
 }
+
+# Firewall
 
 resource "google_compute_firewall" "allow_iap_forwarded_ssh" {
   name    = "allow-iap-forwarded-ssh"
@@ -104,40 +104,13 @@ resource "google_compute_firewall" "allow_http" {
   target_tags   = ["http-server"]
 }
 
-# us-west1 Region
+# Subnetworks
 
-resource "google_compute_subnetwork" "foundations_us_west1" {
-  name          = "foundations-us-west1"
-  network       = google_compute_network.foundations.id
-  region        = "us-west1"
-  ip_cidr_range = "10.64.0.0/24"
+module "vpc_subnetwork_gcp_us_west1" {
+  source = "./modules/gcp-vpc-subnetwork"
 
-  log_config {
-    aggregation_interval = "INTERVAL_10_MIN"
-    flow_sampling        = 0.5
-    metadata             = "INCLUDE_ALL_METADATA"
-  }
-}
-
-resource "google_compute_router" "us_west1" {
-  name    = "foundations-us-west1"
-  region  = "us-west1"
-  network = google_compute_network.foundations.id
-
-  bgp {
-    asn = 64514
-  }
-}
-
-resource "google_compute_router_nat" "us_west1" {
-  name                               = "foundations-us-west1"
-  router                             = google_compute_router.us_west1.name
-  region                             = "us-west1"
-  nat_ip_allocate_option             = "AUTO_ONLY"
-  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
-
-  log_config {
-    enable = true
-    filter = "ERRORS_ONLY"
-  }
+  name           = "foundations-us-west1"
+  gcp_network_id = google_compute_network.foundations.id
+  gcp_region     = "us-west1"
+  ipv4_cidr      = "10.64.0.0/24"
 }

@@ -32,7 +32,7 @@ module "orchestrator_gcp_us_west1_a_1" {
   gcp_boot_disk_kms_key_id = google_kms_crypto_key.disk_global_1_1.id
   gcp_data_disk_id         = google_compute_disk.us_west1_a_1_data.id
   gcp_data_disk_kms_key_id = google_compute_disk.us_west1_a_1_data.disk_encryption_key[0].kms_key_self_link
-  gcp_vpc_subnet_id        = google_compute_subnetwork.foundations_us_west1.id
+  gcp_vpc_subnet_id        = module.vpc_subnetwork_gcp_us_west1.gcp_subnetwork_id
 
   zerotier_network_id          = zerotier_network.foundations.id
   zerotier_ipv4                = "10.144.64.1"

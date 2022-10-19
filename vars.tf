@@ -20,7 +20,7 @@ variable "acme_server" {
 
 variable "acme_email" {
   type        = string
-  description = "Contaact email address for ACME registration"
+  description = "Contact email address for ACME registration"
 }
 
 variable "gcp_billing_account_id" {

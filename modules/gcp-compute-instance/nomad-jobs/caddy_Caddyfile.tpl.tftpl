@@ -1,17 +1,16 @@
-# TODO: replace deployment-specific strings with template variables throughout this file
 {
 	email "${acme_email}"
 }
 
 # Service Nomad
 
-nomad.s.infra.${root_domain},
-nomad.s.${device_subname}.d.infra.${root_domain} {
+nomad.s.${infra_domain},
+nomad.s.${device_subname}.d.${infra_domain} {
 	reverse_proxy localhost:4646
 }
 
-nomad.s.foundations.infra.${root_domain},
-nomad.s.${device_subname}.d.foundations.infra.${root_domain} {
+nomad.s.${zerotier_network_domain},
+nomad.s.${device_subname}.d.${zerotier_network_domain} {
 	reverse_proxy localhost:4646
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
@@ -45,7 +44,7 @@ nomad.s.${device_subname}.d.foundations.infra.${root_domain} {
 		{{- end -}}
 
 		{{- range $service := nomadService $serviceInfo.Name }}
-{{ $service.Name | toLower }}.s.foundations.infra.${root_domain} {
+{{ $service.Name | toLower }}.s.${zerotier_network_domain} {
 	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"

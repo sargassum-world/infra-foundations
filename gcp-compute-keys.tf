@@ -1,9 +1,12 @@
 # Keys
 
-# Note: depends on google_project_service.cloudkms
 resource "google_kms_key_ring" "disks_global_1" {
   name     = "foundations-disks-1"
   location = "global"
+
+  depends_on = [
+    google_project_service.cloudkms
+  ]
 }
 
 # Note: the Terraform service account must be given the Cloud KMS Admin role or another role with

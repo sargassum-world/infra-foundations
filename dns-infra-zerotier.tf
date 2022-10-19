@@ -45,3 +45,8 @@ resource "acme_certificate" "zerotier_wildcards" {
     }
   }
 }
+
+locals {
+  acme_ztoverlay_certificate = "${acme_certificate.zerotier_wildcards.certificate_pem}${acme_certificate.zerotier_wildcards.issuer_pem}"
+  acme_ztoverlay_private_key = acme_certificate.zerotier_wildcards.private_key_pem
+}

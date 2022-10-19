@@ -1,16 +1,21 @@
+output "name" {
+  description = "Name of the instance"
+  value       = var.name
+}
+
+output "gcp_instance_id" {
+  description = "ID of the GCP compute instance"
+  value       = google_compute_instance.instance.instance_id
+}
+
+output "public_ipv4" {
+  description = "Public IPv4 address assigned to the instance"
+  value       = google_compute_address.instance.address
+}
+
 output "zerotier_address" {
   description = "Address of the ZeroTier One agent assigned to the instance"
   value       = zerotier_identity.instance.id
-}
-
-output "zerotier_private_key" {
-  description = "Private key of the ZeroTier One agent assigned to the instance"
-  value       = zerotier_identity.instance.private_key
-}
-
-output "zerotier_public_key" {
-  description = "Public key of the ZeroTier One agent assigned to the instance"
-  value       = zerotier_identity.instance.public_key
 }
 
 output "zerotier_ipv4" {

@@ -4,7 +4,6 @@ resource "google_compute_network" "foundations" {
   name = "foundations"
 }
 
-# Note: depends on google_project_service.iap
 resource "google_compute_firewall" "allow_iap_forwarded_ssh" {
   name    = "allow-iap-forwarded-ssh"
   network = google_compute_network.foundations.name
@@ -15,6 +14,10 @@ resource "google_compute_firewall" "allow_iap_forwarded_ssh" {
 
   source_ranges = ["35.235.240.0/20"]
   target_tags   = ["iap-ssh"]
+
+  depends_on = [
+    google_project_service.iap
+  ]
 }
 
 resource "google_compute_firewall" "allow_zerotier_udp" {

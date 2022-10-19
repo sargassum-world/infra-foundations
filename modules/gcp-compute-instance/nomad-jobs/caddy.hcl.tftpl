@@ -1,18 +1,18 @@
-job "caddy" {
+job "caddy_${resource_name}" {
   type = "service"
-  datacenters = ["sargassum-foundations"]
+  datacenters = ["${datacenter}"]
+
+  affinity {
+    attribute = "$${attr.unique.hostname}" # Nomad variable, not Terraform template variable
+    value     = "${affinity}"
+  }
 
   update {
     max_parallel = 1
   }
 
-  group "${group}" {
+  group "reverse_proxy" {
     count = 1
-
-    affinity {
-      attribute = "$${attr.unique.hostname}" # Nomad variable, not Terraform template variable
-      value     = "${affinity}"
-    }
 
     network {
       mode = "host"

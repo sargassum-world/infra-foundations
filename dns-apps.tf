@@ -2,7 +2,7 @@ resource "desec_rrset" "fluitans_a" {
   domain  = desec_domain.root.name
   subname = "fluitans"
   type    = "A"
-  records = [google_compute_address.us_west1_a_1.address]
+  records = [module.orchestrator_gcp_us_west1_a_1.public_ipv4]
   ttl     = 3600
 }
 

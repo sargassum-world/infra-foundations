@@ -21,17 +21,6 @@ resource "zerotier_network" "foundations" {
   }
 }
 
-# Virtual Machines
-
-resource "zerotier_identity" "gcp_us_west1_a_1" {}
-
-resource "zerotier_member" "gcp_us_west1_a_1" {
-  name           = "gcp-us-west1-a-1"
-  member_id      = zerotier_identity.gcp_us_west1_a_1.id
-  network_id     = zerotier_network.foundations.id
-  ip_assignments = ["10.144.64.1"]
-}
-
 # Administrative devices
 
 # TODO: specify administrative members through a Terraform variable

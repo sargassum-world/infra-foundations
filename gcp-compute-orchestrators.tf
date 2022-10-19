@@ -66,4 +66,14 @@ resource "google_compute_instance" "us_west1_a_1" {
   }
 }
 
+module "orchestrator_gcp_us_west1_a_1" {
+  source = "./modules/gcp-compute-instance"
+
+  name                         = "gcp-us-west1-a-1"
+  zerotier_network_id          = zerotier_network.foundations.id
+  zerotier_ipv4                = "10.144.64.1"
+  dns_domain_name              = desec_domain.infra.name
+  dns_zerotier_network_subname = "foundations"
+}
+
 # TODO: add a machine with a "worker" image (i.e. only a Nomad client with a Caddy reverse proxy) to run high-bandwidth/compute services for live.sargassum.world under soe-sargassum-planktoscope (for billing reasons)

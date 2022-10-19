@@ -12,7 +12,7 @@ resource "desec_rrset" "zerotier_wildcard_a" {
   domain  = desec_domain.infra.name
   subname = "*.s.foundations"
   type    = "A"
-  records = desec_rrset.zerotier_device_gcp_us_west1_a_1_a.records
+  records = [module.orchestrator_gcp_us_west1_a_1.zerotier_ipv4]
   ttl     = 3600
 }
 
@@ -20,7 +20,7 @@ resource "desec_rrset" "zerotier_wildcard_aaaa" {
   domain  = desec_domain.infra.name
   subname = "*.s.foundations"
   type    = "AAAA"
-  records = desec_rrset.zerotier_device_gcp_us_west1_a_1_aaaa.records
+  records = [module.orchestrator_gcp_us_west1_a_1.zerotier_ipv6]
   ttl     = 3600
 }
 
@@ -34,7 +34,7 @@ resource "acme_certificate" "zerotier_wildcards" {
   common_name     = desec_domain.infra.name
   subject_alternative_names = [
     "*.s.foundations.${desec_domain.infra.name}",
-    "*.s.gcp-us-west1-a-1.d.foundations.${desec_domain.infra.name}",
+    "*.s.${module.orchestrator_gcp_us_west1_a_1.dns_zerotier_subname}.${desec_domain.infra.name}",
   ]
 
   dns_challenge {

@@ -1,11 +1,16 @@
-# Note: depends on google_project_service.iam
 data "google_storage_project_service_account" "default" {
+  depends_on = [
+    google_project_service.iam
+  ]
 }
 
-# Note: depends on google_project_service.cloudkms
 resource "google_kms_key_ring" "buckets_global_1" {
   name     = "foundations-buckets-1"
   location = "global"
+
+  depends_on = [
+    google_project_service.cloudkms
+  ]
 }
 
 # Note: the Terraform service account must be given the Cloud KMS Admin role or another role with
@@ -29,10 +34,13 @@ resource "google_kms_crypto_key" "bucket_global_1_1" {
   }
 }
 
-# Note: depends on google_project_service.cloudkms
 resource "google_kms_key_ring" "buckets_us_west1_1" {
   name     = "foundations-buckets-us-west1-1"
   location = "us-west1"
+
+  depends_on = [
+    google_project_service.cloudkms
+  ]
 }
 
 # Note: the Terraform service account must be given the Cloud KMS Admin role or another role with

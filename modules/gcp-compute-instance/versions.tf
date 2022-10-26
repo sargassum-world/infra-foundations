@@ -6,7 +6,7 @@ terraform {
     }
     zerotier = {
       source  = "zerotier/zerotier"
-      version = "~> 1.2.0"
+      version = "~> 1.3.1"
     }
     desec = {
       source  = "Valodim/desec"

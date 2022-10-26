@@ -101,7 +101,7 @@ resource "google_compute_firewall" "allow_http" {
 }
 
 resource "google_compute_firewall" "allow_http3" {
-  name    = "allow-http"
+  name    = "allow-http-3"
   network = google_compute_network.network.name
 
   allow {

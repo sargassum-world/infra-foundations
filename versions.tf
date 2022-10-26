@@ -18,7 +18,7 @@ terraform {
     }
     zerotier = {
       source  = "zerotier/zerotier"
-      version = "~> 1.2.0"
+      version = "~> 1.3.0"
     }
     desec = {
       source  = "Valodim/desec"
@@ -30,11 +30,7 @@ terraform {
     }
     google = {
       source  = "hashicorp/google"
-      version = "~> 4.40.0"
-    }
-    nomad = {
-      source  = "hashicorp/nomad"
-      version = "~> 1.4.18"
+      version = "~> 4.41.0"
     }
   }
 }

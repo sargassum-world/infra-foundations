@@ -99,3 +99,16 @@ resource "google_compute_firewall" "allow_http" {
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["http-server"]
 }
+
+resource "google_compute_firewall" "allow_http3" {
+  name    = "allow-http"
+  network = google_compute_network.network.name
+
+  allow {
+    protocol = "udp"
+    ports    = ["80", "443"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["http3-server"]
+}

@@ -27,6 +27,7 @@ module "orchestrator_gcp_us_west1_a_1" {
   gcp_machine_type = "e2-micro"
   gcp_tags = [
     "iap-ssh", "zerotier-agent", "nomad-api", "nomad-server", "nomad-client", "http-server",
+    "http3-server",
   ]
   gcp_boot_disk_image      = var.gcp_vm_orchestrator_image
   gcp_boot_disk_kms_key_id = google_kms_crypto_key.disk_global_1_1.id

@@ -14,7 +14,7 @@ terraform {
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "~> 4.0.3"
+      version = "~> 4.0.4"
     }
     zerotier = {
       source  = "zerotier/zerotier"
@@ -30,7 +30,7 @@ terraform {
     }
     google = {
       source  = "hashicorp/google"
-      version = "~> 4.41.0"
+      version = "~> 4.46.0"
     }
   }
 }

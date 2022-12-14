@@ -1,3 +1,6 @@
+# Note: the Service Usage API and Cloud Resource Manager API must first be manually enabled.
+# Also, the service account should have the editor role.
+
 # Main Project
 
 resource "google_project_service" "cloudbilling" {

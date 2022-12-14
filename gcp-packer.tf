@@ -26,6 +26,16 @@ resource "google_project_iam_member" "iap_service_pkr" {
   member  = "serviceAccount:${google_service_account.packer.email}"
 }
 
+# Note: the Terraform service account must be given the Project IAM Admin role or another role with
+# the resourcemanager.projects.setIamPolicy permission, such as the Security Admin role, so that it
+# can manage the roles for GCP's own service accounts. You can manually do this from the IAM & Admin
+# console.
+resource "google_project_iam_member" "iam_service_pkr" {
+  project = google_project.foundations.project_id
+  role    = "roles/iam.serviceAccountUser"
+  member  = "serviceAccount:${google_service_account.packer.email}"
+}
+
 # Planktoscope Project
 
 resource "google_service_account" "packer_planktoscope" {
@@ -54,5 +64,16 @@ resource "google_project_iam_member" "iap_service_pkr_planktoscope" {
   provider = google.planktoscope
   project  = google_project.foundations_planktoscope.project_id
   role     = "roles/iap.tunnelResourceAccessor"
+  member   = "serviceAccount:${google_service_account.packer_planktoscope.email}"
+}
+
+# Note: the Terraform service account must be given the Project IAM Admin role or another role with
+# the resourcemanager.projects.setIamPolicy permission, such as the Security Admin role, so that it
+# can manage the roles for GCP's own service accounts. You can manually do this from the IAM & Admin
+# console.
+resource "google_project_iam_member" "iam_service_pkr_planktoscope" {
+  provider = google.planktoscope
+  project  = google_project.foundations_planktoscope.project_id
+  role     = "roles/iam.serviceAccountUser"
   member   = "serviceAccount:${google_service_account.packer_planktoscope.email}"
 }

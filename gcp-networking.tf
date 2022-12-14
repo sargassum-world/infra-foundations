@@ -47,3 +47,18 @@ module "vpc_subnetwork_planktoscope_gcp_us_west1" {
     google = google.planktoscope
   }
 }
+
+# Network Peering
+
+resource "google_compute_network_peering" "main_planktoscope" {
+  name         = "main-planktoscope"
+  network      = module.vpc_network.gcp_network_self_link
+  peer_network = module.vpc_network_planktoscope.gcp_network_self_link
+}
+
+resource "google_compute_network_peering" "planktoscope_main" {
+  provider     = google.planktoscope
+  name         = "planktoscope-main"
+  network      = module.vpc_network_planktoscope.gcp_network_self_link
+  peer_network = module.vpc_network.gcp_network_self_link
+}

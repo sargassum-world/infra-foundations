@@ -58,9 +58,9 @@ variable "gcp_planktoscope_project_id" {
   description = "GCP project ID for the Planktoscope-supported GCP project"
 }
 
-variable "gcp_planktoscope_vm_orchestrator_image" {
+variable "gcp_planktoscope_vm_worker_image" {
   type        = string
-  description = "Orchestrator VM image for the Planktoscope-supported GCP project"
+  description = "Worker VM image for the Planktoscope-supported GCP project"
 }
 
 variable "nomad_secret_id" {

@@ -41,7 +41,7 @@ module "vpc_subnetwork_planktoscope_gcp_us_west1" {
   name           = "foundations-us-west1"
   gcp_network_id = module.vpc_network_planktoscope.gcp_network_id
   gcp_region     = "us-west1"
-  ipv4_cidr      = "10.64.1.0/24"
+  ipv4_cidr      = "10.64.64.0/24"
 
   providers = {
     google = google.planktoscope

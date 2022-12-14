@@ -17,6 +17,10 @@ module "vpc_subnetwork_gcp_us_west1" {
   gcp_network_id = module.vpc_network.gcp_network_id
   gcp_region     = "us-west1"
   ipv4_cidr      = "10.64.0.0/24"
+
+  depends_on = [
+    module.vpc_network
+  ]
 }
 
 # Planktoscope Project
@@ -43,6 +47,10 @@ module "vpc_subnetwork_planktoscope_gcp_us_west1" {
   gcp_region     = "us-west1"
   ipv4_cidr      = "10.64.64.0/24"
 
+  depends_on = [
+    module.vpc_network_planktoscope
+  ]
+
   providers = {
     google = google.planktoscope
   }
@@ -54,6 +62,11 @@ resource "google_compute_network_peering" "main_planktoscope" {
   name         = "main-planktoscope"
   network      = module.vpc_network.gcp_network_self_link
   peer_network = module.vpc_network_planktoscope.gcp_network_self_link
+
+  depends_on = [
+    module.vpc_network,
+    module.vpc_network_planktoscope
+  ]
 }
 
 resource "google_compute_network_peering" "planktoscope_main" {
@@ -61,4 +74,9 @@ resource "google_compute_network_peering" "planktoscope_main" {
   name         = "planktoscope-main"
   network      = module.vpc_network_planktoscope.gcp_network_self_link
   peer_network = module.vpc_network.gcp_network_self_link
+
+  depends_on = [
+    module.vpc_network_planktoscope,
+    module.vpc_network
+  ]
 }

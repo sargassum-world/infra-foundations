@@ -50,7 +50,8 @@ module "orchestrator_gcp_us_west1_a_1" {
   nomad_datacenter = "sargassum-foundations"
 
   depends_on = [
-    google_project_service.compute
+    google_project_service.compute,
+    module.vpc_subnetwork_gcp_us_west1
   ]
 }
 

@@ -9,9 +9,18 @@ provider "desec" {
 }
 
 provider "google" {
-  project = var.gcp_project_id
-  region  = "us-west1"
-  zone    = "us-west1-a"
+  project     = var.gcp_project_id
+  credentials = var.gcp_credentials
+  region      = "us-west1"
+  zone        = "us-west1-a"
+}
+
+provider "google" {
+  alias       = "planktoscope"
+  project     = var.gcp_planktoscope_project_id
+  credentials = var.gcp_planktoscope_credentials
+  region      = "us-west1"
+  zone        = "us-west1-a"
 }
 
 provider "nomad" {

@@ -23,19 +23,44 @@ variable "acme_email" {
   description = "Contact email address for ACME registration"
 }
 
+variable "gcp_credentials" {
+  type        = string
+  description = "GCP account credentials for authentication"
+}
+
 variable "gcp_billing_account_id" {
   type        = string
-  description = "GCP billing account ID"
+  description = "GCP billing account ID for the main GCP project"
 }
 
 variable "gcp_project_id" {
   type        = string
-  description = "GCP project ID"
+  description = "GCP project ID for the main GCP project"
 }
 
 variable "gcp_vm_orchestrator_image" {
   type        = string
-  description = "Orchestrator VM image"
+  description = "Orchestrator VM image for the main GCP project"
+}
+
+variable "gcp_planktoscope_credentials" {
+  type        = string
+  description = "GCP account credentials for authentication for the Planktoscope-supported GCP project"
+}
+
+variable "gcp_planktoscope_billing_account_id" {
+  type        = string
+  description = "GCP billing account ID for the Planktoscope-supported GCP project"
+}
+
+variable "gcp_planktoscope_project_id" {
+  type        = string
+  description = "GCP project ID for the Planktoscope-supported GCP project"
+}
+
+variable "gcp_planktoscope_vm_orchestrator_image" {
+  type        = string
+  description = "Orchestrator VM image for the Planktoscope-supported GCP project"
 }
 
 variable "nomad_secret_id" {

@@ -54,6 +54,10 @@ module "worker_gcp_us_west1_a_2" {
     google_project_service.compute_planktoscope,
     module.vpc_subnetwork_planktoscope_gcp_us_west1
   ]
+
+  providers = {
+    google = google.planktoscope
+  }
 }
 
 # TODO: add a machine with a "worker" image (i.e. only a Nomad client with a Caddy reverse proxy) to run high-bandwidth/compute services for live.sargassum.world

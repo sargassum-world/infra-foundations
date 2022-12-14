@@ -2,7 +2,7 @@ resource "google_compute_subnetwork" "subnetwork" {
   name          = var.name
   network       = var.gcp_network_id
   region        = var.gcp_region
-  ip_cidr_range = "10.64.0.0/24"
+  ip_cidr_range = var.ipv4_cidr
 
   log_config {
     aggregation_interval = "INTERVAL_10_MIN"

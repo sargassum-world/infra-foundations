@@ -1,0 +1,12 @@
+#!/bin/bash -eux
+
+if [[ -f "/var/lib/zerotier-one/identity.secret" ]]; then
+  exit
+fi
+
+echo "${zerotier_private_key}" > /var/lib/zerotier-one/identity.secret
+echo "${zerotier_public_key}" > /var/lib/zerotier-one/identity.public
+
+sudo systemctl enable zerotier-one
+sudo systemctl start zerotier-one
+sudo zerotier-cli join "${zerotier_network_id}"

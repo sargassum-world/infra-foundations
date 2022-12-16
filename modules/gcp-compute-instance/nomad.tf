@@ -10,28 +10,6 @@ resource "nomad_scheduler_config" "config" {
 
 # Jobs
 
-# TODO: move these jobs into the gcp-compute-orchestrators.tf file
-resource "nomad_job" "zerotier_agent" {
-  jobspec = templatefile("${path.module}/nomad-jobs/zerotier-agent.hcl.tftpl", {
-    resource_name       = replace(var.name, "-", "_")
-    datacenter          = var.nomad_datacenter
-    hostname_constraint = var.name
-    private_key         = zerotier_identity.instance.private_key
-    public_key          = zerotier_identity.instance.public_key
-    network             = var.zerotier_network_id
-  })
-
-  hcl2 {
-    enabled = true
-  }
-
-  lifecycle {
-    replace_triggered_by = [
-      google_compute_instance.instance.instance_id,
-    ]
-  }
-}
-
 resource "nomad_job" "caddy" {
   jobspec = templatefile("${path.module}/nomad-jobs/caddy.hcl.tftpl", {
     resource_name         = replace(var.name, "-", "_")

@@ -37,6 +37,14 @@ resource "google_compute_instance" "instance" {
     block-project-ssh-keys = true
   }
 
+  # TODO: to prevent leaking the private key through metadata, remove any permissions for the
+  # instance to query metadata fields.
+  metadata_startup_script = templatefile("${path.module}/startup-script.sh.tftpl", {
+    zerotier_private_key = zerotier_identity.instance.private_key
+    zerotier_public_key  = zerotier_identity.instance.public_key
+    zerotier_network_id  = var.zerotier_network_id
+  })
+
   tags = var.gcp_tags
 
   shielded_instance_config {

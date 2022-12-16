@@ -43,7 +43,10 @@ resource "google_compute_instance" "instance" {
   # and it's unclear whether removing access would also prevent the startup script from being run.
   # Another option could be to make the startup script delete secrets from metadata, though
   # Terraform will restore them on the next apply (which will make Terraform diffs annoying).
-  # For now we will live with this security vulnerability.
+  # Another option could be to use Terraform's not-recommended file provisioner to distribute the
+  # private key.
+  # The most secure and complx option would probably be to distribute the private key through Vault.
+  # For now we will live with this security vulnerability as-is.
   metadata_startup_script = templatefile("${path.module}/startup-script.sh.tftpl", {
     zerotier_private_key = zerotier_identity.instance.private_key
     zerotier_public_key  = zerotier_identity.instance.public_key

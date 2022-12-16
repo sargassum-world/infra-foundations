@@ -43,51 +43,6 @@ resource "google_compute_firewall" "allow_nomad_http" {
   target_tags   = ["nomad-api"]
 }
 
-# We don't need to connect to clients over the public internet yet
-/*
-resource "google_compute_firewall" "allow_nomad_rpc" {
-  name    = "allow-nomad-rpc"
-  network = google_compute_network.network.name
-
-  allow {
-    protocol = "tcp"
-    ports    = ["4647"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["nomad-server", "nomad-client"]
-}
-*/
-
-# We don't need Nomad server clustering yet
-/*
-resource "google_compute_firewall" "allow_nomad_serf_tcp" {
-  name    = "allow-nomad-serf-tcp"
-  network = google_compute_network.network.name
-
-  allow {
-    protocol = "tcp"
-    ports    = ["4648"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["nomad-server"]
-}
-
-resource "google_compute_firewall" "allow_nomad_serf_udp" {
-  name    = "allow-nomad-serf-udp"
-  network = google_compute_network.network.name
-
-  allow {
-    protocol = "udp"
-    ports    = ["4648"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["nomad-server"]
-}
-*/
-
 resource "google_compute_firewall" "allow_http" {
   name    = "allow-http"
   network = google_compute_network.network.name

@@ -2,9 +2,9 @@ job "zerotier_agent_${resource_name}" {
   type = "service"
   datacenters = ["${datacenter}"]
 
-  affinity {
+  constraint {
     attribute = "$${attr.unique.hostname}" # Nomad variable, not Terraform template variable
-    value     = "${affinity}"
+    value     = "${hostname_constraint}"
   }
 
   update {

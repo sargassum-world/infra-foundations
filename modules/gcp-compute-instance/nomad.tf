@@ -13,12 +13,12 @@ resource "nomad_scheduler_config" "config" {
 # TODO: move these jobs into the gcp-compute-orchestrators.tf file
 resource "nomad_job" "zerotier_agent" {
   jobspec = templatefile("${path.module}/nomad-jobs/zerotier-agent.hcl.tftpl", {
-    resource_name = replace(var.name, "-", "_")
-    datacenter    = var.nomad_datacenter
-    affinity      = var.name
-    private_key   = zerotier_identity.instance.private_key
-    public_key    = zerotier_identity.instance.public_key
-    network       = var.zerotier_network_id
+    resource_name       = replace(var.name, "-", "_")
+    datacenter          = var.nomad_datacenter
+    hostname_constraint = var.name
+    private_key         = zerotier_identity.instance.private_key
+    public_key          = zerotier_identity.instance.public_key
+    network             = var.zerotier_network_id
   })
 
   hcl2 {
@@ -36,7 +36,7 @@ resource "nomad_job" "caddy" {
   jobspec = templatefile("${path.module}/nomad-jobs/caddy.hcl.tftpl", {
     resource_name         = replace(var.name, "-", "_")
     datacenter            = var.nomad_datacenter
-    affinity              = var.name
+    hostname_constraint   = var.name
     ztoverlay_certificate = var.acme_ztoverlay_certificate
     ztoverlay_private_key = var.acme_ztoverlay_private_key
     caddyfile = templatefile("${path.module}/nomad-jobs/caddy_Caddyfile.tpl.tftpl", {

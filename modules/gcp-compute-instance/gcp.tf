@@ -37,8 +37,13 @@ resource "google_compute_instance" "instance" {
     block-project-ssh-keys = true
   }
 
-  # TODO: to prevent leaking the private key through metadata, remove any permissions for the
-  # instance to query metadata fields.
+  # FIXME: this leaks the private key through metadata, thus exposing it through Nomad's web UI
+  # which displays client info. To prevent this, remove any permissions for the instance to query
+  # metadata fields. Note that this also disables use of the VM instance's default service account;
+  # and it's unclear whether removing access would also prevent the startup script from being run.
+  # Another option could be to make the startup script delete secrets from metadata, though
+  # Terraform will restore them on the next apply (which will make Terraform diffs annoying).
+  # For now we will live with this security vulnerability.
   metadata_startup_script = templatefile("${path.module}/startup-script.sh.tftpl", {
     zerotier_private_key = zerotier_identity.instance.private_key
     zerotier_public_key  = zerotier_identity.instance.public_key

@@ -9,4 +9,8 @@ echo "${zerotier_public_key}" > /var/lib/zerotier-one/identity.public
 
 sudo systemctl enable zerotier-one
 sudo systemctl start zerotier-one
+until curl "localhost:9993"; do
+  sleep 1
+done
+
 sudo zerotier-cli join "${zerotier_network_id}"

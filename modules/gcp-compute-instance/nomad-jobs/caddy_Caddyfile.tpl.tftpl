@@ -24,26 +24,36 @@ nomad.s.${device_subname}.d.${zerotier_network_domain} {
 	{{- if $serviceInfo.Tags | contains $enableFilterMatch }}
 
 # Service {{ $serviceInfo.Name }}
-		{{ if $serviceInfo.Tags | contains $publicFilterMatch -}}
+{{ /* newline */ -}}
+		{{- if $serviceInfo.Tags | contains $publicFilterMatch -}}
 
+			{{- /* e.g. custom-service-name.sargassum.world */ -}}
 			{{- if $serviceInfo.Tags | contains $customHostsFilterMatch -}}
 				{{- range $tag := $serviceInfo.Tags -}}
 					{{- if $tag | regexMatch $customHostFilterPattern -}}
 						{{- range $service := nomadService $serviceInfo.Name }}
-{{ $tag | regexReplaceAll $customHostFilterPattern "$1" }},
+
+{{ $tag | regexReplaceAll $customHostFilterPattern "$1" }} {
+	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
+}
 						{{- end -}}
 					{{- end -}}
 				{{- end -}}
 			{{- end -}}
 
+			{{- /* e.g. service-name.s.sargassum.world */ -}}
 			{{- range $service := nomadService $serviceInfo.Name }}
+
 {{ $service.Name | toLower }}.s.${root_domain} {
 	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
 			{{- end -}}
+
 		{{- end -}}
 
+		{{- /* e.g. service-name.s.foundations.infra.sargassum.world */ -}}
 		{{- range $service := nomadService $serviceInfo.Name }}
+
 {{ $service.Name | toLower }}.s.${zerotier_network_domain} {
 	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 

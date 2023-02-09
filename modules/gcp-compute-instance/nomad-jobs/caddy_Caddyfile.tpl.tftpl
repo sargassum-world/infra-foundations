@@ -44,11 +44,13 @@ nomad.s.${device_subname}.d.${zerotier_network_domain} {
 			{{- if $serviceInfo.Tags | contains $customHostsFilterMatch -}}
 				{{- range $tag := $serviceInfo.Tags -}}
 					{{- if $tag | regexMatch $customHostFilterPattern -}}
-						{{- range $service := nomadService $serviceInfo.Name }}
+						{{- range $service := nomadService $serviceInfo.Name -}}
+							{{- if eq (env "attr.unique.network.ip-address") $service.Address }}
 
 {{ $tag | regexReplaceAll $customHostFilterPattern "$1" }} {
-	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
+	reverse_proxy localhost:{{ $service.Port }}
 }
+							{{- end -}}
 						{{- end -}}
 					{{- end -}}
 				{{- end -}}

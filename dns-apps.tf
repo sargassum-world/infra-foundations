@@ -2,11 +2,9 @@ resource "desec_rrset" "fluitans_a" {
   domain  = desec_domain.root.name
   subname = "fluitans"
   type    = "A"
-  records = [
-    module.orchestrator_gcp_us_west1_a_1.public_ipv4,
-    module.worker_gcp_us_west1_a_2.public_ipv4,
-  ]
-  ttl = 3600
+  # This should be a list of all VMs hosting the fluitans service
+  records = [module.orchestrator_gcp_us_west1_a_1.public_ipv4]
+  ttl     = 3600
 }
 
 # TODO: migrate live.sargassum.world to managed infra

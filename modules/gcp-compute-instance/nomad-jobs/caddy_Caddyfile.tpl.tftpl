@@ -14,7 +14,7 @@ nomad.s.${infra_domain} {
 	reverse_proxy localhost:4646
 }
 {{- end -}}
-{{- if $isOrchestrator -}}
+{{- if $isOrchestrator }}
 
 nomad.s.${zerotier_network_domain} {
 	reverse_proxy localhost:4646

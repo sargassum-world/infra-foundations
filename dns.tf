@@ -18,8 +18,11 @@ resource "desec_rrset" "root_services_wildcard_a" {
   domain  = desec_domain.root.name
   subname = "*.s"
   type    = "A"
-  records = [module.orchestrator_gcp_us_west1_a_1.public_ipv4]
-  ttl     = 3600
+  records = [
+    module.orchestrator_gcp_us_west1_a_1.public_ipv4,
+    module.worker_gcp_us_west1_a_2.public_ipv4,
+  ]
+  ttl = 3600
 }
 
 # SendGrid DNS challenge

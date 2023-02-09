@@ -62,6 +62,12 @@ nomad.s.${device_subname}.d.${zerotier_network_domain} {
 {{ $service.Name | toLower }}.s.${root_domain} {
 	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
+				{{- if eq (env "attr.unique.network.ip-address") $service.Address }}
+
+{{ $service.Name | toLower }}.s.${device_subname}.d.${infra_domain} {
+	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
+}
+				{{- end -}}
 			{{- end -}}
 
 		{{- end -}}
@@ -74,6 +80,14 @@ nomad.s.${device_subname}.d.${zerotier_network_domain} {
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
+			{{- if eq (env "attr.unique.network.ip-address") $service.Address }}
+
+{{ $service.Name | toLower }}.s.${device_subname}.d.${zerotier_network_domain} {
+	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
+
+	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
+}
+			{{- end -}}
 		{{- end -}}
 	{{- end -}}
 {{- end }}

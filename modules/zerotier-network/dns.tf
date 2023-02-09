@@ -9,13 +9,13 @@ resource "desec_rrset" "txt" {
 # Services (with HTTPS reverse proxying through gcp-us-west1-a-1)
 
 # FIXME: for some reason the IPv4 addresses are unreachable, at least on Stanford wifi
-# resource "desec_rrset" "services_wildcard_a" {
-#   domain  = var.name_parent_domain
-#   subname = "*.s.${var.name_subname}"
-#   type    = "A"
-#   records = var.service_reverse_proxies_ipv4
-#   ttl     = 3600
-# }
+resource "desec_rrset" "services_wildcard_a" {
+  domain  = var.name_parent_domain
+  subname = "*.s.${var.name_subname}"
+  type    = "A"
+  records = var.service_reverse_proxies_ipv4
+  ttl     = 3600
+}
 
 resource "desec_rrset" "services_wildcard_aaaa" {
   domain  = var.name_parent_domain

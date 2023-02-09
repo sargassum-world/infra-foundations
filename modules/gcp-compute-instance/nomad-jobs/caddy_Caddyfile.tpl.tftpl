@@ -14,14 +14,6 @@ nomad.s.${device_subname}.d.${infra_domain} {
 nomad.s.${infra_domain} {
 	reverse_proxy localhost:4646
 }
-{{- end -}}
-{{- if $isOrchestrator }}
-
-nomad.s.${zerotier_network_domain} {
-	reverse_proxy localhost:4646
-
-	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
-}
 {{- end }}
 
 nomad.s.${device_subname}.d.${zerotier_network_domain} {
@@ -29,6 +21,15 @@ nomad.s.${device_subname}.d.${zerotier_network_domain} {
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
+
+{{- if $isOrchestrator }}
+
+nomad.s.${zerotier_network_domain} {
+	reverse_proxy localhost:4646
+
+	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
+}
+{{- end -}}
 
 {{- $enableFilterMatch := "caddy.enable=true" -}}
 {{- $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}

@@ -18,6 +18,8 @@ resource "desec_rrset" "root_services_wildcard_a" {
   domain  = desec_domain.root.name
   subname = "*.s"
   type    = "A"
+  # This should be a list of all VMs acting as reverse proxies
+  # TODO: automatically generate this by iterating through all VMs
   records = [
     module.orchestrator_gcp_us_west1_a_1.public_ipv4,
     module.worker_gcp_us_west1_a_2.public_ipv4,

@@ -4,12 +4,24 @@
 
 # Service Nomad
 
-nomad.s.${infra_domain},
+{{ if eq meta.nomad_role "orchestrator" -}}
+nomad.s.${infra_domain} {
+	reverse_proxy localhost:4646
+}
+{{- end }}
+
 nomad.s.${device_subname}.d.${infra_domain} {
 	reverse_proxy localhost:4646
 }
 
-nomad.s.${zerotier_network_domain},
+{{ if eq meta.nomad_role "orchestrator" -}}
+nomad.s.${zerotier_network_domain} {
+	reverse_proxy localhost:4646
+
+	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
+}
+{{- end }}
+
 nomad.s.${device_subname}.d.${zerotier_network_domain} {
 	reverse_proxy localhost:4646
 
@@ -60,4 +72,4 @@ nomad.s.${device_subname}.d.${zerotier_network_domain} {
 }
 		{{- end -}}
 	{{- end -}}
-{{- end -}}
+{{- end }}

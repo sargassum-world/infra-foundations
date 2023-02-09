@@ -23,8 +23,7 @@ nomad.s.${device_subname}.d.${zerotier_network_domain} {
 {{- range $serviceInfo := nomadServices -}}
 	{{- if $serviceInfo.Tags | contains $enableFilterMatch }}
 
-# Service {{ $serviceInfo.Name }}
-{{ /* newline */ -}}
+# Service {{ $serviceInfo.Name -}}
 		{{- if $serviceInfo.Tags | contains $publicFilterMatch -}}
 
 			{{- /* e.g. custom-service-name.sargassum.world */ -}}

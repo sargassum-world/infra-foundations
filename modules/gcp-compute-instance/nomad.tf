@@ -25,7 +25,6 @@ resource "nomad_job" "caddy" {
       acme_email              = var.acme_email
     })
   })
-  detach = false
 
   hcl2 {
     enabled = true
@@ -35,10 +34,5 @@ resource "nomad_job" "caddy" {
     replace_triggered_by = [
       google_compute_instance.instance.instance_id,
     ]
-  }
-
-  timeouts {
-    create = "5m"
-    update = "5m"
   }
 }

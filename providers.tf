@@ -24,8 +24,7 @@ provider "google" {
 }
 
 provider "nomad" {
-  # address   = "http://${desec_rrset.service_nomad_a.subname}${desec_rrset.service_nomad_a.domain}:4646"
-  address   = "http://gcp-us-west1-a-1.d.infra.sargassum.world:4646"
+  address   = "http://${desec_rrset.service_nomad_a.subname}.${desec_rrset.service_nomad_a.domain}:4646"
   secret_id = var.nomad_secret_id
 }
 

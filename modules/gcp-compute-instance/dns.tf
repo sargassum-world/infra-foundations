@@ -35,13 +35,14 @@ locals {
   )
 }
 
-resource "desec_rrset" "zerotier_device_a" {
-  domain  = var.dns_infra_domain_name
-  subname = local.subname_zerotier_device
-  type    = "A"
-  records = zerotier_member.instance.ipv4_assignments
-  ttl     = 3600
-}
+# FIXME: for some reason the IPv4 addresses are unreachable, at least on Stanford wifi
+# resource "desec_rrset" "zerotier_device_a" {
+#   domain  = var.dns_infra_domain_name
+#   subname = local.subname_zerotier_device
+#   type    = "A"
+#   records = zerotier_member.instance.ipv4_assignments
+#   ttl     = 3600
+# }
 
 resource "desec_rrset" "zerotier_device_aaaa" {
   domain  = var.dns_infra_domain_name
@@ -51,13 +52,14 @@ resource "desec_rrset" "zerotier_device_aaaa" {
   ttl     = 3600
 }
 
-resource "desec_rrset" "zerotier_device_services_wildcard_a" {
-  domain  = var.dns_infra_domain_name
-  subname = "*.s.${local.subname_zerotier_device}"
-  type    = "A"
-  records = zerotier_member.instance.ipv4_assignments
-  ttl     = 3600
-}
+# FIXME: for some reason the IPv4 addresses are unreachable, at least on Stanford wifi
+# resource "desec_rrset" "zerotier_device_services_wildcard_a" {
+#   domain  = var.dns_infra_domain_name
+#   subname = "*.s.${local.subname_zerotier_device}"
+#   type    = "A"
+#   records = zerotier_member.instance.ipv4_assignments
+#   ttl     = 3600
+# }
 
 resource "desec_rrset" "zerotier_device_services_wildcard_aaaa" {
   domain  = var.dns_infra_domain_name

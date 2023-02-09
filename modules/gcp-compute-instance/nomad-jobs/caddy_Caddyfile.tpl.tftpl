@@ -48,7 +48,7 @@ nomad.s.${device_subname}.d.${zerotier_network_domain} {
 							{{- if eq (env "attr.unique.network.ip-address") $service.Address }}
 
 {{ $tag | regexReplaceAll $customHostFilterPattern "$1" }} {
-	reverse_proxy localhost:{{ $service.Port }}
+	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
 							{{- end -}}
 						{{- end -}}

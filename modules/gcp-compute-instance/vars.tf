@@ -53,6 +53,18 @@ variable "zerotier_ipv4" {
   description = "IPv4 address to assign to the instance in the ZeroTier network"
 }
 
+variable "zerotier_ipv6_sixplane" {
+  type        = bool
+  description = "Whether 6PLANE IPv6 addresses are auto-assigned in the ZeroTier network"
+  default     = true
+}
+
+variable "zerotier_ipv6_rfc4193" {
+  type        = bool
+  description = "Whether RFC4193 IPv6 addresses are auto-assigned in the ZeroTier network"
+  default     = false
+}
+
 variable "dns_root_domain_name" {
   type        = string
   description = "Parent DNS domain name for root-level services"

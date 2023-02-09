@@ -19,13 +19,23 @@ output "zerotier_address" {
 }
 
 output "zerotier_ipv4" {
-  description = "IPv4 address assigned to the instance on the ZeroTier network"
-  value       = var.zerotier_ipv4
+  description = "IPv4 addresses assigned to the instance on the ZeroTier network"
+  value       = zerotier_member.instance.ipv4_assignments
 }
 
 output "zerotier_ipv6" {
+  description = "IPv6 addresses assigned to the instance on the ZeroTier network"
+  value       = local.zerotier_ipv6_all
+}
+
+output "zerotier_ipv6_rfc4193" {
   description = "RFC4193 NDP IPv6 address assigned to the instance on the ZeroTier network"
-  value       = local.zerotier_ipv6_rfc4193
+  value       = zerotier_member.instance.rfc4193
+}
+
+output "zerotier_ipv6_6plane" {
+  description = "6PLANE NDP IPv6 address assigned to the instance on the ZeroTier network"
+  value       = zerotier_member.instance.sixplane
 }
 
 output "dns_zerotier_subname" {

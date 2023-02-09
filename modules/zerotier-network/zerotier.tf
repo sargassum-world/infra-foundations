@@ -8,8 +8,8 @@ resource "zerotier_network" "network" {
 
   assign_ipv6 {
     zerotier = false
-    sixplane = true
-    rfc4193  = true
+    sixplane = var.zerotier_ipv6_sixplane
+    rfc4193  = var.zerotier_ipv6_rfc4193
   }
 
   private          = true

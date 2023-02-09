@@ -21,7 +21,6 @@ resource "nomad_job" "caddy" {
       root_domain             = var.dns_root_domain_name
       infra_domain            = var.dns_infra_domain_name
       zerotier_network_domain = "${var.dns_zerotier_network_subname}.${var.dns_infra_domain_name}"
-      device_subname          = var.name
       acme_email              = var.acme_email
     })
   })

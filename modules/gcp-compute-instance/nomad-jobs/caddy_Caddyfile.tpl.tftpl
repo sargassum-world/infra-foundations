@@ -1,10 +1,11 @@
 {
 	email "${acme_email}"
 }
+{{- $device_subname := env "node.unique.hostname" }}
 
 # Service Nomad
 
-nomad.s.${device_subname}.d.${infra_domain} {
+nomad.s.{{ $device_subname }}.d.${infra_domain} {
 	reverse_proxy localhost:4646
 }
 
@@ -16,7 +17,7 @@ nomad.s.${infra_domain} {
 }
 {{- end }}
 
-nomad.s.${device_subname}.d.${zerotier_network_domain} {
+nomad.s.{{ $device_subname }}.d.${zerotier_network_domain} {
 	reverse_proxy localhost:4646
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
@@ -65,7 +66,7 @@ nomad.s.${zerotier_network_domain} {
 }
 				{{- if eq (env "attr.unique.network.ip-address") $service.Address }}
 
-{{ $service.Name | toLower }}.s.${device_subname}.d.${infra_domain} {
+{{ $service.Name | toLower }}.s.{{ $device_subname }}.d.${infra_domain} {
 	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 }
 				{{- end -}}
@@ -83,7 +84,7 @@ nomad.s.${zerotier_network_domain} {
 }
 			{{- if eq (env "attr.unique.network.ip-address") $service.Address }}
 
-{{ $service.Name | toLower }}.s.${device_subname}.d.${zerotier_network_domain} {
+{{ $service.Name | toLower }}.s.{{ $device_subname }}.d.${zerotier_network_domain} {
 	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"

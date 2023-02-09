@@ -25,7 +25,7 @@ module "worker_gcp_us_west1_a_2" {
   name = "gcp-us-west1-a-2"
 
   gcp_zone         = "us-west1-a"
-  gcp_machine_type = "e2-micro"
+  gcp_machine_type = "e2-small"
   gcp_tags = [
     "iap-ssh", "zerotier-agent", "nomad-api", "nomad-server", "nomad-client", "http-server",
     "http3-server",

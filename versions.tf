@@ -26,7 +26,7 @@ terraform {
     }
     acme = {
       source  = "vancluever/acme"
-      version = "~> 2.11.1"
+      version = "~> 2.12.0"
     }
     google = {
       source  = "hashicorp/google"

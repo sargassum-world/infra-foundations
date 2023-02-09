@@ -4,7 +4,8 @@
 
 # Service Nomad
 
-{{ if eq meta.nomad_role "orchestrator" -}}
+{{ $isOrchestrator := eq (env "meta.nomad_role") "orchestrator"}}
+{{ if $isOrchestrator -}}
 nomad.s.${infra_domain} {
 	reverse_proxy localhost:4646
 }
@@ -14,7 +15,7 @@ nomad.s.${device_subname}.d.${infra_domain} {
 	reverse_proxy localhost:4646
 }
 
-{{ if eq meta.nomad_role "orchestrator" -}}
+{{ if $isOrchestrator -}}
 nomad.s.${zerotier_network_domain} {
 	reverse_proxy localhost:4646
 

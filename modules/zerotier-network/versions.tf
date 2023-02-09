@@ -2,7 +2,7 @@ terraform {
   required_providers {
     zerotier = {
       source  = "zerotier/zerotier"
-      version = "~> 1.3.0"
+      version = "~> 1.4.0"
     }
     desec = {
       source  = "Valodim/desec"

@@ -24,14 +24,14 @@ resource "desec_rrset" "device_services_wildcard_a" {
 
 locals {
   subname_zerotier_device = "${var.name}.d.${var.dns_zerotier_network_subname}"
+  # FIXME: The Terraform ZeroTier provider seems to have a bug where it flips the sixplane and
+  # rfc4193 addresses! See https://github.com/zerotier/terraform-provider-zerotier/issues/36
+  zerotier_ipv6_sixplane = replace(zerotier_member.instance.rfc4193, ":0000:0000:0001", "::1")
+  zerotier_ipv6_rfc4193  = zerotier_member.instance.sixplane
   zerotier_ipv6_all = setunion(
     zerotier_member.instance.ipv6_assignments,
-    # FIXME: The Terraform ZeroTier provider seems to have a bug where it flips the sixplane and
-    # rfc4193 addresses! See https://github.com/zerotier/terraform-provider-zerotier/issues/36
-    # var.zerotier_ipv6_sixplane ? [zerotier_member.instance.sixplane] : [],
-    # var.zerotier_ipv6_rfc4193 ? [zerotier_member.instance.rfc4193] : []
-    var.zerotier_ipv6_sixplane ? [zerotier_member.instance.rfc4193] : [],
-    var.zerotier_ipv6_rfc4193 ? [zerotier_member.instance.sixplane] : []
+    var.zerotier_ipv6_sixplane ? [local.zerotier_ipv6_sixplane] : [],
+    var.zerotier_ipv6_rfc4193 ? [local.zerotier_ipv6_rfc4193] : []
   )
 }
 

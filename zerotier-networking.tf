@@ -18,7 +18,10 @@ module "zerotier_network_foundations" {
     module.orchestrator_gcp_us_west1_a_1.zerotier_ipv6,
     module.worker_gcp_us_west1_a_2.zerotier_ipv6,
   )
-  service_device_subnames = [module.orchestrator_gcp_us_west1_a_1.dns_zerotier_subname]
+  service_device_subnames = [
+    module.orchestrator_gcp_us_west1_a_1.dns_zerotier_subname,
+    module.worker_gcp_us_west1_a_2.dns_zerotier_subname,
+  ]
 
   acme_account_key     = acme_registration.main.account_key_pem
   acme_desec_api_token = var.desec_api_token

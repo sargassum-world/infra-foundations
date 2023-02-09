@@ -8,13 +8,14 @@ resource "desec_rrset" "txt" {
 
 # Services (with HTTPS reverse proxying through gcp-us-west1-a-1)
 
-resource "desec_rrset" "services_wildcard_a" {
-  domain  = var.name_parent_domain
-  subname = "*.s.${var.name_subname}"
-  type    = "A"
-  records = var.service_reverse_proxies_ipv4
-  ttl     = 3600
-}
+# FIXME: for some reason the IPv4 addresses are unreachable, at least on Stanford wifi
+# resource "desec_rrset" "services_wildcard_a" {
+#   domain  = var.name_parent_domain
+#   subname = "*.s.${var.name_subname}"
+#   type    = "A"
+#   records = var.service_reverse_proxies_ipv4
+#   ttl     = 3600
+# }
 
 resource "desec_rrset" "services_wildcard_aaaa" {
   domain  = var.name_parent_domain
@@ -25,7 +26,7 @@ resource "desec_rrset" "services_wildcard_aaaa" {
 }
 
 # HTTPS DNS Challenge
-# Needed for HTTPS with *.s.infra.sargassum.world and *.d.infra.sargassum.world
+# Needed for HTTPS with ZeroTier
 
 # Right now we're using this because Caddy can't solve HTTP or TLS-ALPN challenges from the ZeroTier network
 # FIXME: Are there any security holes with this approach compared to using Caddy for the DNS challenge?
@@ -33,8 +34,18 @@ resource "acme_certificate" "wildcards" {
   account_key_pem = var.acme_account_key
   common_name     = var.name_parent_domain
   subject_alternative_names = concat(
+    # e.g. *.s.foundations.infra.sargassum.world:
     ["*.s.${var.name_subname}.${var.name_parent_domain}"],
-    [for subname in var.service_device_subnames : "*.s.${subname}.${var.name_parent_domain}"],
+    # e.g. *.d.foundations.infra.sargassum.world:
+    [
+      for device_subname in var.service_device_subnames :
+      "${device_subname}.${var.name_parent_domain}"
+    ],
+    # e.g. *.s.*.d.foundations.infra.sargassum.world:
+    [
+      for device_subname in var.service_device_subnames :
+      "*.s.${device_subname}.${var.name_parent_domain}"
+    ],
   )
 
   dns_challenge {

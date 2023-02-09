@@ -40,16 +40,8 @@ module "orchestrator_gcp_us_west1_a_1" {
   zerotier_ipv6_sixplane = module.zerotier_network_foundations.zerotier_ipv6_sixplane
   zerotier_ipv6_rfc4193  = module.zerotier_network_foundations.zerotier_ipv6_rfc4193
 
-  dns_root_domain_name               = desec_domain.root.name
-  dns_infra_domain_name              = desec_domain.infra.name
-  dns_zerotier_network_subname       = module.zerotier_network_foundations.name_subname
-  dns_zerotier_network_parent_domain = module.zerotier_network_foundations.name_parent_domain
-
-  acme_email                 = var.acme_email
-  acme_ztoverlay_certificate = module.zerotier_network_foundations.acme_certificate
-  acme_ztoverlay_private_key = module.zerotier_network_foundations.acme_private_key
-
-  nomad_datacenter = "sargassum-foundations"
+  dns_infra_domain_name        = desec_domain.infra.name
+  dns_zerotier_network_subname = module.zerotier_network_foundations.name_subname
 
   depends_on = [
     google_project_service.compute,

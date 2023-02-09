@@ -1,11 +1,6 @@
-job "caddy_${resource_name}" {
-  type = "service"
+job "caddy" {
+  type = "system"
   datacenters = ["${datacenter}"]
-
-  constraint {
-    attribute = "$${attr.unique.hostname}" # Nomad variable, not Terraform template variable
-    value     = "${hostname_constraint}"
-  }
 
   update {
     max_parallel = 1

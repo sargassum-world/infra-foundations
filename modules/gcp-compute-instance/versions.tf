@@ -12,9 +12,5 @@ terraform {
       source  = "Valodim/desec"
       version = "~> 0.3.0"
     }
-    nomad = {
-      source  = "hashicorp/nomad"
-      version = "~> 1.4.19"
-    }
   }
 }

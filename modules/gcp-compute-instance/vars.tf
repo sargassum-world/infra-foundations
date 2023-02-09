@@ -65,11 +65,6 @@ variable "zerotier_ipv6_rfc4193" {
   default     = false
 }
 
-variable "dns_root_domain_name" {
-  type        = string
-  description = "Parent DNS domain name for root-level services"
-}
-
 variable "dns_infra_domain_name" {
   type        = string
   description = "Parent DNS domain name for infrastructure-related RRsets"
@@ -78,29 +73,4 @@ variable "dns_infra_domain_name" {
 variable "dns_zerotier_network_subname" {
   type        = string
   description = "DNS subname for the ZeroTier network, under dns_zerotier_network_parent_domain"
-}
-
-variable "dns_zerotier_network_parent_domain" {
-  type        = string
-  description = "Parent DNS domain name for the ZeroTier network"
-}
-
-variable "acme_email" {
-  type        = string
-  description = "Contact email address for ACME registration"
-}
-
-variable "acme_ztoverlay_certificate" {
-  type        = string
-  description = "Full chain certificate in PEM format for HTTPS on domain names in the ZeroTier network"
-}
-
-variable "acme_ztoverlay_private_key" {
-  type        = string
-  description = "Private key in PEM format for HTTPS on domain names in the ZeroTier network"
-}
-
-variable "nomad_datacenter" {
-  type        = string
-  description = "Name of the Nomad datacenter to run instance-specific jobs"
 }

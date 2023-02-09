@@ -26,10 +26,12 @@ locals {
   subname_zerotier_device = "${var.name}.d.${var.dns_zerotier_network_subname}"
   zerotier_ipv6_all = setunion(
     zerotier_member.instance.ipv6_assignments,
-    # FIXME: for some reason, we can't seem to remove RFC4193 addresses from DNS records
-    # var.zerotier_ipv6_rfc4193 ? [zerotier_member.instance.rfc4193] : [],
-    [zerotier_member.instance.rfc4193],
-    var.zerotier_ipv6_sixplane ? [zerotier_member.instance.sixplane] : []
+    # FIXME: The Terraform ZeroTier provider seems to have a bug where it flips the sixplane and
+    # rfc4193 addresses! See https://github.com/zerotier/terraform-provider-zerotier/issues/36
+    # var.zerotier_ipv6_sixplane ? [zerotier_member.instance.sixplane] : [],
+    # var.zerotier_ipv6_rfc4193 ? [zerotier_member.instance.rfc4193] : []
+    var.zerotier_ipv6_sixplane ? [zerotier_member.instance.rfc4193] : [],
+    var.zerotier_ipv6_rfc4193 ? [zerotier_member.instance.sixplane] : []
   )
 }
 

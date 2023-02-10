@@ -19,10 +19,10 @@ if [[ ! -f "/etc/docker/daemon.json" ]]; then
 fi
 
 if [[ ! -f "/etc/nomad.d/client-meta.hcl" ]]; then
-  cat > /etc/nomad.d/client-meta.hcl <<EOL
+  sudo tee > /etc/nomad.d/client-meta.hcl <<EOL
 client {
   meta {
-    zerotier_sixplane_prefix = "$zerotier_sixplane_prefix"
+    zerotier_sixplane_prefix = "${zerotier_sixplane_prefix}"
   }
 }
 EOL

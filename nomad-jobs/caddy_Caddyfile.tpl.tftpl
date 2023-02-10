@@ -59,7 +59,7 @@ nomad.s.${zerotier_network_domain} {
 		{{- $ipv6Match := and (sprig_contains ":" $service.Address) (not sprig_contains "://" $service.Address) -}}
 		{{- $normalizedAddress := $service.Address -}}
 		{{- if $ipv6Match -}}
-			{{- $normalizedAddress = cat "[" $service.Address "]"}}
+			{{- $normalizedAddress = sprig_cat "[" $service.Address "]"}}
 		{{- end}}
 
 {{/* e.g. service-name.s.foundations.infra.sargassum.world */ -}}
@@ -96,7 +96,7 @@ tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 		{{- $ipv6Match := and (sprig_contains ":" $service.Address) (not sprig_contains "://" $service.Address) -}}
 		{{- $normalizedAddress := $service.Address -}}
 		{{- if $ipv6Match -}}
-			{{- $normalizedAddress = cat "[" $service.Address "]"}}
+			{{- $normalizedAddress = sprig_cat "[" $service.Address "]"}}
 		{{- end}}
 
 {{/* e.g. service-name.s.sargassum.world */ -}}
@@ -129,7 +129,7 @@ reverse_proxy {{$service.Address}}:{{$service.Port}}
 			{{- $ipv6Match := and (sprig_contains ":" $service.Address) (not sprig_contains "://" $service.Address) -}}
 			{{- $normalizedAddress := $service.Address -}}
 			{{- if $ipv6Match -}}
-				{{- $normalizedAddress = cat "[" $service.Address "]"}}
+				{{- $normalizedAddress = sprig_cat "[" $service.Address "]"}}
 			{{- end -}}
 			{{- $exactIPMatch := eq (env "attr.unique.network.ip-address") $service.Address -}}
 			{{- $sixplanePrefixMatch := sprig_hasPrefix $sixplanePrefix $service.Address -}}

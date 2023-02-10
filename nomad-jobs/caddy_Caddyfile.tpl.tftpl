@@ -82,17 +82,16 @@ reverse_proxy {{$service.Address}}:{{$service.Port}}
 tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
 
-		{{- end -}}
 	{{- end -}}
 
 	{{- /* Public domain names */ -}}
-	{{- $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}
-	{{- if not ($serviceInfo.Tags | contains $publicFilterMatch) -}}
-		{{- continue -}}
-	{{- end -}}
-
-	{{- /* Auto-assigned domain names */ -}}
 	{{- range $service := nomadService $serviceInfo.Name -}}
+		{{- $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}
+		{{- if not ($serviceInfo.Tags | contains $publicFilterMatch) -}}
+			{{- continue -}}
+		{{- end -}}
+
+		{{- /* Auto-assigned public domain names */ -}}
 		{{- $ipv6Match := and (sprig_contains ":" $service.Address) (not sprig_contains "://" $service.Address) -}}
 		{{- $normalizedAddress := $service.Address -}}
 		{{- if $ipv6Match -}}
@@ -104,15 +103,14 @@ tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 reverse_proxy {{$service.Address}}:{{$service.Port}}
 }
 
-		{{- if not eq (env "attr.unique.network.ip-address") $service.Address -}}
-			{{- continue -}}
-		{{- end}}
+		{{- if eq (env "attr.unique.network.ip-address") $service.Address}}
 
 {{/* e.g. service-name.s.device-name.d.infra.sargassum.world */ -}}
 {{$service.Name | toLower}}.s.{{$deviceSubname}}.d.${infra_domain} {
 reverse_proxy {{$service.Address}}:{{$service.Port}}
 }
 
+		{{- end -}}
 	{{- end -}}
 
 	{{- /* Custom-assigned public domain names */ -}}
@@ -120,6 +118,7 @@ reverse_proxy {{$service.Address}}:{{$service.Port}}
 	{{- if not ($serviceInfo.Tags | contains $customHostsFilterMatch) -}}
 		{{- continue -}}
 	{{- end -}}
+
 	{{- range $tag := $serviceInfo.Tags -}}
 		{{- $customHostFilterPattern := `caddy\.reverse_proxy\.host=(.*)` -}}
 		{{- if not ($tag | regexMatch $customHostFilterPattern) -}}

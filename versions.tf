@@ -10,7 +10,7 @@ terraform {
   required_providers {
     local = {
       source  = "hashicorp/local"
-      version = "~> 2.2.3"
+      version = "~> 2.3.0"
     }
     tls = {
       source  = "hashicorp/tls"
@@ -26,11 +26,11 @@ terraform {
     }
     acme = {
       source  = "vancluever/acme"
-      version = "~> 2.11.1"
+      version = "~> 2.12.0"
     }
     google = {
       source  = "hashicorp/google"
-      version = "~> 4.46.0"
+      version = "~> 4.52.0"
     }
   }
 }

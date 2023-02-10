@@ -29,6 +29,9 @@ job "caddy" {
         network_mode = "host"
         ports        = ["http", "https"]
         cap_add      = ["net_bind_service"]
+        sysctl = {
+          "net.core.rmem_max" = "2500000"
+        }
 
         mount {
           type     = "volume"

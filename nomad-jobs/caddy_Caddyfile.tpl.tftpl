@@ -12,25 +12,16 @@
 
 # Service Nomad
 
-{{/* e.g. nomad.s.device-name.d.infra.sargassum.world */ -}}
-nomad.s.{{$deviceSubname}}.d.${infra_domain} {
-	reverse_proxy localhost:4646
-}
-
-{{- if $isOrchestrator}}
-
-{{/* e.g. nomad.s.infra.sargassum.world */ -}}
-nomad.s.${infra_domain} {
-	reverse_proxy localhost:4646
-}
-
-{{- end}}
-
 {{/* e.g. nomad.s.device-name.d.foundations.infra.sargassum.world */ -}}
 nomad.s.{{$deviceSubname}}.d.${zerotier_network_domain} {
 	reverse_proxy localhost:4646
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
+}
+
+{{/* e.g. nomad.s.device-name.d.infra.sargassum.world */ -}}
+nomad.s.{{$deviceSubname}}.d.${infra_domain} {
+	reverse_proxy localhost:4646
 }
 
 {{- if $isOrchestrator}}
@@ -40,6 +31,11 @@ nomad.s.${zerotier_network_domain} {
 	reverse_proxy localhost:4646
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
+}
+
+{{/* e.g. nomad.s.infra.sargassum.world */ -}}
+nomad.s.${infra_domain} {
+	reverse_proxy localhost:4646
 }
 
 {{- end -}}

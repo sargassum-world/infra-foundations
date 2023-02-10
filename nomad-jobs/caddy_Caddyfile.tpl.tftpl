@@ -52,15 +52,15 @@ nomad.s.${infra_domain} {
 
 	{{- /* Private domain names */ -}}
 	{{- range $service := nomadService $serviceInfo.Name -}}
-		{{- $normalizedAddress := $service.Address -}}
+		{{- $upstreamAddress := $service.Address -}}
 		{{- $isIPv6 := and (sprig_contains ":" $service.Address) (not (sprig_contains "://" $service.Address)) -}}
 		{{- if $isIPv6 -}}
-			{{- $normalizedAddress = sprig_cat "[" $service.Address "]"}}
+			{{- $upstreamAddress = printf "[%s]" $service.Address}}
 		{{- end}}
 
 {{/* e.g. service-name.s.foundations.infra.sargassum.world */ -}}
 {{$service.Name | toLower}}.s.${zerotier_network_domain} {
-	reverse_proxy {{$service.Address}}:{{$service.Port}}
+	reverse_proxy {{$upstreamAddress}}:{{$service.Port}}
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
@@ -73,7 +73,7 @@ nomad.s.${infra_domain} {
 
 {{/* e.g. service-name.s.device-name.d.foundations.infra.sargassum.world */ -}}
 {{$service.Name | toLower}}.s.{{$deviceSubname}}.d.${zerotier_network_domain} {
-	reverse_proxy {{$service.Address}}:{{$service.Port}}
+	reverse_proxy {{$upstreamAddress}}:{{$service.Port}}
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
@@ -88,22 +88,22 @@ nomad.s.${infra_domain} {
 		{{- end -}}
 
 		{{- /* Auto-assigned public domain names */ -}}
-		{{- $normalizedAddress := $service.Address -}}
+		{{- $upstreamAddress := $service.Address -}}
 		{{- $isIPv6 := and (sprig_contains ":" $service.Address) (not (sprig_contains "://" $service.Address)) -}}
 		{{- if $isIPv6 -}}
-			{{- $normalizedAddress = sprig_cat "[" $service.Address "]"}}
+			{{- $upstreamAddress = printf "[%s]" $service.Address}}
 		{{- end}}
 
 {{/* e.g. service-name.s.sargassum.world */ -}}
 {{$service.Name | toLower}}.s.${root_domain} {
-	reverse_proxy {{$service.Address}}:{{$service.Port}}
+	reverse_proxy {{$upstreamAddress}}:{{$service.Port}}
 }
 
 		{{- if eq (env "attr.unique.network.ip-address") $service.Address}}
 
 {{/* e.g. service-name.s.device-name.d.infra.sargassum.world */ -}}
 {{$service.Name | toLower}}.s.{{$deviceSubname}}.d.${infra_domain} {
-	reverse_proxy {{$service.Address}}:{{$service.Port}}
+	reverse_proxy {{$upstreamAddress}}:{{$service.Port}}
 }
 
 		{{- end -}}
@@ -121,10 +121,10 @@ nomad.s.${infra_domain} {
 			{{- continue -}}
 		{{- end -}}
 		{{- range $service := nomadService $serviceInfo.Name -}}
-			{{- $normalizedAddress := $service.Address -}}
+			{{- $upstreamAddress := $service.Address -}}
 			{{- $isIPv6 := and (sprig_contains ":" $service.Address) (not (sprig_contains "://" $service.Address)) -}}
 			{{- if $isIPv6 -}}
-				{{- $normalizedAddress = sprig_cat "[" $service.Address "]"}}
+				{{- $upstreamAddress = printf "[%s]" $service.Address}}
 			{{- end -}}
 			{{- $isExactIP := eq (env "attr.unique.network.ip-address") $service.Address -}}
 			{{- $sixplanePrefixMatch := sprig_hasPrefix $sixplanePrefix $service.Address -}}
@@ -134,7 +134,7 @@ nomad.s.${infra_domain} {
 
 {{/* e.g. custom-service-name.sargassum.world */ -}}
 {{$tag | regexReplaceAll $customHostFilterPattern "$1"}} {
-	reverse_proxy {{$service.Address}}:{{$service.Port}}
+	reverse_proxy {{$upstreamAddress}}:{{$service.Port}}
 }
 
 		{{- end -}}

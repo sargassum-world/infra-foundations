@@ -1,95 +1,148 @@
+{{- $deviceSubname := env "node.unique.name" -}}
+{{- $isOrchestrator := eq (env "meta.nomad_role") "orchestrator" -}}
+{{- $sixplanePrefix := env "meta.zerotier_sixplane_prefix" -}}
+
+# Caddyfile for {{$deviceSubname}}.d.${infra_domain}
+
 {
 	email "${acme_email}"
 }
-{{- $device_subname := env "node.unique.name" }}
+
+{{- /* Nomad */ -}}
 
 # Service Nomad
 
-nomad.s.{{ $device_subname }}.d.${infra_domain} {
+{{/* e.g. nomad.s.device-name.d.infra.sargassum.world */ -}}
+nomad.s.{{$deviceSubname}}.d.${infra_domain} {
 	reverse_proxy localhost:4646
 }
 
-{{- $isOrchestrator := eq (env "meta.nomad_role") "orchestrator" -}}
 {{- if $isOrchestrator}}
 
+{{/* e.g. nomad.s.infra.sargassum.world */ -}}
 nomad.s.${infra_domain} {
 	reverse_proxy localhost:4646
 }
-{{- end }}
 
-nomad.s.{{ $device_subname }}.d.${zerotier_network_domain} {
+{{- end}}
+
+{{/* e.g. nomad.s.device-name.d.foundations.infra.sargassum.world */ -}}
+nomad.s.{{$deviceSubname}}.d.${zerotier_network_domain} {
 	reverse_proxy localhost:4646
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
 
-{{- if $isOrchestrator }}
+{{- if $isOrchestrator}}
 
+{{/* e.g. nomad.s.foundations.infra.sargassum.world */ -}}
 nomad.s.${zerotier_network_domain} {
 	reverse_proxy localhost:4646
 
 	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
+
 {{- end -}}
 
-{{- $enableFilterMatch := "caddy.enable=true" -}}
-{{- $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}
-{{- $customHostsFilterMatch := "caddy.reverse_proxy.custom_hosts=true" -}}
-{{- $customHostFilterPattern := `caddy\.reverse_proxy\.host=(.*)` -}}
+{{- /* Nomad Service Discovery */ -}}
+
 {{- range $serviceInfo := nomadServices -}}
-	{{- if $serviceInfo.Tags | contains $enableFilterMatch }}
+	{{- $enableFilterMatch := "caddy.enable=true" -}}
+	{{- if not ($serviceInfo.Tags | contains $enableFilterMatch ) -}}
+		{{- continue -}}
+	{{- end}}
 
-# Service {{ $serviceInfo.Name -}}
-		{{- if $serviceInfo.Tags | contains $publicFilterMatch -}}
+# Service {{$serviceInfo.Name -}}
 
-			{{- /* e.g. custom-service-name.sargassum.world */ -}}
-			{{- if $serviceInfo.Tags | contains $customHostsFilterMatch -}}
-				{{- range $tag := $serviceInfo.Tags -}}
-					{{- if $tag | regexMatch $customHostFilterPattern -}}
-						{{- range $service := nomadService $serviceInfo.Name -}}
-							{{- if eq (env "attr.unique.network.ip-address") $service.Address }}
+	{{- /* Private domain names */ -}}
+	{{- range $service := nomadService $serviceInfo.Name -}}
+		{{- $ipv6Match := and (sprig_contains ":" $service.Address) (not sprig_contains "://" $service.Address) -}}
+		{{- $normalizedAddress := $service.Address -}}
+		{{- if $ipv6Match -}}
+			{{- $normalizedAddress = cat "[" $service.Address "]"}}
+		{{- end}}
 
-{{ $tag | regexReplaceAll $customHostFilterPattern "$1" }} {
-	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
+{{/* e.g. service-name.s.foundations.infra.sargassum.world */ -}}
+{{$service.Name | toLower}}.s.${zerotier_network_domain} {
+reverse_proxy {{$service.Address}}:{{$service.Port}}
+
+tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
-							{{- end -}}
-						{{- end -}}
-					{{- end -}}
-				{{- end -}}
-			{{- end -}}
 
-			{{- /* e.g. service-name.s.sargassum.world */ -}}
-			{{- range $service := nomadService $serviceInfo.Name }}
+		{{- $exactIPMatch := eq (env "attr.unique.network.ip-address") $service.Address -}}
+		{{- $sixplanePrefixMatch := sprig_hasPrefix $sixplanePrefix $service.Address -}}
+		{{- if not (or $exactIPMatch $sixplanePrefixMatch) -}}
+			{{- continue -}}
+		{{- end}}
 
-{{ $service.Name | toLower }}.s.${root_domain} {
-	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
+{{/* e.g. service-name.s.device-name.d.foundations.infra.sargassum.world */ -}}
+{{$service.Name | toLower}}.s.{{$device_subname}}.d.${zerotier_network_domain} {
+reverse_proxy {{$service.Address}}:{{$service.Port}}
+
+tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
-				{{- if eq (env "attr.unique.network.ip-address") $service.Address }}
 
-{{ $service.Name | toLower }}.s.{{ $device_subname }}.d.${infra_domain} {
-	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
-}
-				{{- end -}}
-			{{- end -}}
-
-		{{- end -}}
-
-		{{- /* e.g. service-name.s.foundations.infra.sargassum.world */ -}}
-		{{- range $service := nomadService $serviceInfo.Name }}
-
-{{ $service.Name | toLower }}.s.${zerotier_network_domain} {
-	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
-
-	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
-}
-			{{- if eq (env "attr.unique.network.ip-address") $service.Address }}
-
-{{ $service.Name | toLower }}.s.{{ $device_subname }}.d.${zerotier_network_domain} {
-	reverse_proxy {{ $service.Address }}:{{ $service.Port }}
-
-	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
-}
-			{{- end -}}
 		{{- end -}}
 	{{- end -}}
-{{- end }}
+
+	{{- /* Public domain names */ -}}
+	{{- $publicFilterMatch := "caddy.reverse_proxy.public=true" -}}
+	{{- if not ($serviceInfo.Tags | contains $publicFilterMatch) -}}
+		{{- continue -}}
+	{{- end -}}
+
+	{{- /* Auto-assigned domain names */ -}}
+	{{- range $service := nomadService $serviceInfo.Name -}}
+		{{- $ipv6Match := and (sprig_contains ":" $service.Address) (not sprig_contains "://" $service.Address) -}}
+		{{- $normalizedAddress := $service.Address -}}
+		{{- if $ipv6Match -}}
+			{{- $normalizedAddress = cat "[" $service.Address "]"}}
+		{{- end}}
+
+{{/* e.g. service-name.s.sargassum.world */ -}}
+{{$service.Name | toLower}}.s.${root_domain} {
+reverse_proxy {{$service.Address}}:{{$service.Port}}
+}
+
+		{{- if not eq (env "attr.unique.network.ip-address") $service.Address -}}
+			{{- continue -}}
+		{{- end}}
+
+{{/* e.g. service-name.s.device-name.d.infra.sargassum.world */ -}}
+{{$service.Name | toLower}}.s.{{$device_subname}}.d.${infra_domain} {
+reverse_proxy {{$service.Address}}:{{$service.Port}}
+}
+
+	{{- end -}}
+
+	{{- /* Custom-assigned public domain names */ -}}
+	{{- $customHostsFilterMatch := "caddy.reverse_proxy.custom_hosts=true" -}}
+	{{- if not ($serviceInfo.Tags | contains $customHostsFilterMatch) -}}
+		{{- continue -}}
+	{{- end -}}
+	{{- range $tag := $serviceInfo.Tags -}}
+		{{- $customHostFilterPattern := `caddy\.reverse_proxy\.host=(.*)` -}}
+		{{- if not ($tag | regexMatch $customHostFilterPattern) -}}
+			{{- continue -}}
+		{{- end -}}
+		{{- range $service := nomadService $serviceInfo.Name -}}
+			{{- $ipv6Match := and (sprig_contains ":" $service.Address) (not sprig_contains "://" $service.Address) -}}
+			{{- $normalizedAddress := $service.Address -}}
+			{{- if $ipv6Match -}}
+				{{- $normalizedAddress = cat "[" $service.Address "]"}}
+			{{- end -}}
+			{{- $exactIPMatch := eq (env "attr.unique.network.ip-address") $service.Address -}}
+			{{- $sixplanePrefixMatch := sprig_hasPrefix $sixplanePrefix $service.Address -}}
+			{{- if not (or $exactIPMatch $sixplanePrefixMatch) -}}
+				{{- continue -}}
+			{{- end}}
+
+{{/* e.g. custom-service-name.sargassum.world */ -}}
+{{$tag | regexReplaceAll $customHostFilterPattern "$1"}} {
+reverse_proxy {{$service.Address}}:{{$service.Port}}
+}
+
+		{{- end -}}
+	{{- end -}}
+{{- end}}
+

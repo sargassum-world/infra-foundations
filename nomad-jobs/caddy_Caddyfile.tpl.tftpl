@@ -64,9 +64,9 @@ nomad.s.${zerotier_network_domain} {
 
 {{/* e.g. service-name.s.foundations.infra.sargassum.world */ -}}
 {{$service.Name | toLower}}.s.${zerotier_network_domain} {
-reverse_proxy {{$service.Address}}:{{$service.Port}}
+	reverse_proxy {{$service.Address}}:{{$service.Port}}
 
-tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
+	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
 
 		{{- $isExactIP := eq (env "attr.unique.network.ip-address") $service.Address -}}
@@ -77,9 +77,9 @@ tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 
 {{/* e.g. service-name.s.device-name.d.foundations.infra.sargassum.world */ -}}
 {{$service.Name | toLower}}.s.{{$deviceSubname}}.d.${zerotier_network_domain} {
-reverse_proxy {{$service.Address}}:{{$service.Port}}
+	reverse_proxy {{$service.Address}}:{{$service.Port}}
 
-tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
+	tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
 
 	{{- end -}}
@@ -100,14 +100,14 @@ tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 
 {{/* e.g. service-name.s.sargassum.world */ -}}
 {{$service.Name | toLower}}.s.${root_domain} {
-reverse_proxy {{$service.Address}}:{{$service.Port}}
+	reverse_proxy {{$service.Address}}:{{$service.Port}}
 }
 
 		{{- if eq (env "attr.unique.network.ip-address") $service.Address}}
 
 {{/* e.g. service-name.s.device-name.d.infra.sargassum.world */ -}}
 {{$service.Name | toLower}}.s.{{$deviceSubname}}.d.${infra_domain} {
-reverse_proxy {{$service.Address}}:{{$service.Port}}
+	reverse_proxy {{$service.Address}}:{{$service.Port}}
 }
 
 		{{- end -}}
@@ -138,7 +138,7 @@ reverse_proxy {{$service.Address}}:{{$service.Port}}
 
 {{/* e.g. custom-service-name.sargassum.world */ -}}
 {{$tag | regexReplaceAll $customHostFilterPattern "$1"}} {
-reverse_proxy {{$service.Address}}:{{$service.Port}}
+	reverse_proxy {{$service.Address}}:{{$service.Port}}
 }
 
 		{{- end -}}

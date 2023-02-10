@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+# Configure ZeroTier for the foundations network
+
 if [[ ! -f "/var/lib/zerotier-one/identity.secret" ]]; then
   echo "${zerotier_private_key}" > /var/lib/zerotier-one/identity.secret
   echo "${zerotier_public_key}" > /var/lib/zerotier-one/identity.public
@@ -13,16 +15,40 @@ if [[ ! -f "/var/lib/zerotier-one/identity.secret" ]]; then
   sudo zerotier-cli join "${zerotier_network_id}"
 fi
 
+# Configure Docker for the foundations network with 6PLANE NDP
+
 if [[ ! -f "/etc/docker/daemon.json" ]]; then
-  jq --null-input --arg cidr "${zerotier_sixplane_prefix}:/80" '{"ipv6": true, "fixed-cidr-v6": $cidr}' > /etc/docker/daemon.json
+  jq --null-input --arg cidr "${zerotier_sixplane_prefix}:/80" '{"ipv6": true, "fixed-cidr-v6": $cidr}' \
+    > /etc/docker/daemon.json
   sudo systemctl reload docker
 fi
 
-if [[ ! -f "/etc/nomad.d/client-meta.hcl" ]]; then
-  sudo tee > /etc/nomad.d/client-meta.hcl <<EOL
+# Configure Nomad for the foundations network with 6PLANE NDP
+
+if [[ ! -f "/etc/nomad.d/zerotier-networking.hcl" ]]; then
+  sudo tee > /etc/nomad.d/zerotier-networking.hcl <<EOL
+addresses {
+  rpc = "${zerotier_sixplane_prefix}:1"
+  serf = "${zerotier_sixplane_prefix}:1"
+}
+
+advertise {
+  http = "${zerotier_sixplane_prefix}:1"
+  rpc = "${zerotier_sixplane_prefix}:1"
+  serf = "${zerotier_sixplane_prefix}:1"
+}
+
 client {
+  # Only schedules ZeroTier-assigned IPv4 addresses on host. See https://github.com/hashicorp/nomad/issues/6412
+  network_interface = "{{ GetPrivateInterfaces | include \\"address\\" \\"${zerotier_sixplane_prefix}:1\\" | limit 1 | attr \\"name\\" }}"
+
   meta {
     zerotier_sixplane_prefix = "${zerotier_sixplane_prefix}"
+  }
+
+  # Only schedules ZeroTier 6PLANE IPv6 addresses on host.
+  host_network "foundations_ipv6" {
+    cidr = "${zerotier_sixplane_prefix}:/80"
   }
 }
 EOL

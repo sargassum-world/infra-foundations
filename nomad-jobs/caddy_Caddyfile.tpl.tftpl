@@ -56,9 +56,9 @@ nomad.s.${zerotier_network_domain} {
 
 	{{- /* Private domain names */ -}}
 	{{- range $service := nomadService $serviceInfo.Name -}}
-		{{- $ipv6Match := and (sprig_contains ":" $service.Address) (not sprig_contains "://" $service.Address) -}}
 		{{- $normalizedAddress := $service.Address -}}
-		{{- if $ipv6Match -}}
+		{{- $isIPv6 := and (sprig_contains ":" $service.Address) (not (sprig_contains "://" $service.Address)) -}}
+		{{- if $isIPv6 -}}
 			{{- $normalizedAddress = sprig_cat "[" $service.Address "]"}}
 		{{- end}}
 
@@ -69,9 +69,9 @@ reverse_proxy {{$service.Address}}:{{$service.Port}}
 tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 }
 
-		{{- $exactIPMatch := eq (env "attr.unique.network.ip-address") $service.Address -}}
+		{{- $isExactIP := eq (env "attr.unique.network.ip-address") $service.Address -}}
 		{{- $sixplanePrefixMatch := sprig_hasPrefix $sixplanePrefix $service.Address -}}
-		{{- if not (or $exactIPMatch $sixplanePrefixMatch) -}}
+		{{- if not (or $isExactIP $sixplanePrefixMatch) -}}
 			{{- continue -}}
 		{{- end}}
 
@@ -92,9 +92,9 @@ tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 		{{- end -}}
 
 		{{- /* Auto-assigned public domain names */ -}}
-		{{- $ipv6Match := and (sprig_contains ":" $service.Address) (not sprig_contains "://" $service.Address) -}}
 		{{- $normalizedAddress := $service.Address -}}
-		{{- if $ipv6Match -}}
+		{{- $isIPv6 := and (sprig_contains ":" $service.Address) (not (sprig_contains "://" $service.Address)) -}}
+		{{- if $isIPv6 -}}
 			{{- $normalizedAddress = sprig_cat "[" $service.Address "]"}}
 		{{- end}}
 
@@ -125,14 +125,14 @@ reverse_proxy {{$service.Address}}:{{$service.Port}}
 			{{- continue -}}
 		{{- end -}}
 		{{- range $service := nomadService $serviceInfo.Name -}}
-			{{- $ipv6Match := and (sprig_contains ":" $service.Address) (not sprig_contains "://" $service.Address) -}}
 			{{- $normalizedAddress := $service.Address -}}
-			{{- if $ipv6Match -}}
+			{{- $isIPv6 := and (sprig_contains ":" $service.Address) (not (sprig_contains "://" $service.Address)) -}}
+			{{- if $isIPv6 -}}
 				{{- $normalizedAddress = sprig_cat "[" $service.Address "]"}}
 			{{- end -}}
-			{{- $exactIPMatch := eq (env "attr.unique.network.ip-address") $service.Address -}}
+			{{- $isExactIP := eq (env "attr.unique.network.ip-address") $service.Address -}}
 			{{- $sixplanePrefixMatch := sprig_hasPrefix $sixplanePrefix $service.Address -}}
-			{{- if not (or $exactIPMatch $sixplanePrefixMatch) -}}
+			{{- if not (or $isExactIP $sixplanePrefixMatch) -}}
 				{{- continue -}}
 			{{- end}}
 

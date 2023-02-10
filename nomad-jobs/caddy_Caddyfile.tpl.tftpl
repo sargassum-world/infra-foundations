@@ -76,7 +76,7 @@ tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
 		{{- end}}
 
 {{/* e.g. service-name.s.device-name.d.foundations.infra.sargassum.world */ -}}
-{{$service.Name | toLower}}.s.{{$device_subname}}.d.${zerotier_network_domain} {
+{{$service.Name | toLower}}.s.{{$deviceSubname}}.d.${zerotier_network_domain} {
 reverse_proxy {{$service.Address}}:{{$service.Port}}
 
 tls "/secrets/ztoverlay.crt" "/secrets/ztoverlay.key"
@@ -109,7 +109,7 @@ reverse_proxy {{$service.Address}}:{{$service.Port}}
 		{{- end}}
 
 {{/* e.g. service-name.s.device-name.d.infra.sargassum.world */ -}}
-{{$service.Name | toLower}}.s.{{$device_subname}}.d.${infra_domain} {
+{{$service.Name | toLower}}.s.{{$deviceSubname}}.d.${infra_domain} {
 reverse_proxy {{$service.Address}}:{{$service.Port}}
 }
 

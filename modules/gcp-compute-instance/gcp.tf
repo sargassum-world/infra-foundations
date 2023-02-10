@@ -39,15 +39,15 @@ resource "google_compute_instance" "instance" {
 
   # FIXME: this leaks the private key through metadata, thus exposing it through Nomad's web UI
   # which displays client info. To mitigate this, we can symmetrically encrypt the keys, and bake
-  # the decryption key into a file on the VM image using Packer, and make the startup script decrypt
-  # the provided keys.
-  # The most secure and complex option would probably be to distribute the private key through
-  # Vault, though.
-  # For now we will live with this security vulnerability as-is.
+  # the decryption key into a file on the data disk, and make the startup script decrypt the
+  # provided keys and delete the decryption key.
+  # The most secure option would probably be to distribute the private key through
+  # Vault, though it's too complex for us for now.
   metadata_startup_script = templatefile("${path.module}/startup-script.sh.tftpl", {
-    zerotier_private_key = zerotier_identity.instance.private_key
-    zerotier_public_key  = zerotier_identity.instance.public_key
-    zerotier_network_id  = var.zerotier_network_id
+    zerotier_private_key     = zerotier_identity.instance.private_key
+    zerotier_public_key      = zerotier_identity.instance.public_key
+    zerotier_network_id      = var.zerotier_network_id
+    zerotier_sixplane_prefix = replace(local.zerotier_ipv6_sixplane, "::1", ":")
   })
 
   tags = var.gcp_tags

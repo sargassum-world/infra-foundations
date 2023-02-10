@@ -33,9 +33,9 @@ output "zerotier_ipv6_rfc4193" {
   value       = zerotier_member.instance.rfc4193
 }
 
-output "zerotier_ipv6_6plane" {
+output "zerotier_ipv6_sixplane" {
   description = "6PLANE NDP IPv6 address assigned to the instance on the ZeroTier network"
-  value       = zerotier_member.instance.sixplane
+  value       = local.zerotier_ipv6_sixplane
 }
 
 output "dns_zerotier_subname" {

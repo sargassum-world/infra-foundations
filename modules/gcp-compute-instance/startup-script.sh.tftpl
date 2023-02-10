@@ -20,7 +20,7 @@ fi
 if [[ ! -f "/etc/docker/daemon.json" ]]; then
   jq --null-input --arg cidr "${zerotier_sixplane_prefix}:/80" '{"ipv6": true, "fixed-cidr-v6": $cidr}' \
     > /etc/docker/daemon.json
-  sudo systemctl reload docker
+  sudo systemctl restart docker
 fi
 
 # Configure Nomad for the foundations network with 6PLANE NDP
